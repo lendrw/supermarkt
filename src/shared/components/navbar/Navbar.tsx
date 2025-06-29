@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 
 export const Navbar: React.FC = () => {
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex items-center justify-between">
+    <nav className="fixed h-[60px] top-0 left-0 right-0 z-50 bg-white shadow-md px-6 py-4 flex items-center justify-between">
       <div className="flex text-xl font-bold text-blue-600">
         Super
         <SiCoinmarketcap className="w-7 h-7 text-orange-500" />
