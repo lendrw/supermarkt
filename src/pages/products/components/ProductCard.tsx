@@ -1,5 +1,5 @@
-import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 import priceWithoutDiscount from "../../../shared/utils/discount";
+import { RenderStars } from './RenderStars';
 
 interface IProductCardProps {
   id: number;
@@ -18,33 +18,6 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   rating,
   discountPercentage,
 }) => {
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating - fullStars >= 0.5;
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<FaStar key={i} className="text-yellow-400 w-4 h-4" />);
-    }
-
-    if (hasHalfStar) {
-      stars.push(
-        <FaStarHalfAlt key="half" className="text-yellow-400 w-4 h-4" />
-      );
-    }
-
-    while (stars.length < 5) {
-      stars.push(
-        <FaRegStar
-          key={`empty-${stars.length}`}
-          className="text-yellow-400 w-4 h-4"
-        />
-      );
-    }
-
-    return stars;
-  };
-
   return (
     <div
       key={id}
@@ -65,7 +38,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
         )}
       </div>
       <p className="flex gap-1 items-center justify-end mt-1">
-        {renderStars(rating)}
+        <RenderStars rating={rating}/>
       </p>
       {discountPercentage >= 10 && (
         <p className="bg-yellow-200 text-red-500 text-lg font-bold rounded-md absolute p-1 top-0 right-0">
