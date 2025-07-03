@@ -1,14 +1,15 @@
+import { BrowserRouter } from 'react-router-dom'
 import './App.css'
-import { ProductList } from './pages/products/ProductList'
 import { Navbar } from './shared/components'
+import { AppRoutes } from './routes'
 
 function App() {
 
   return (
-    <>
+    <BrowserRouter>
       <Navbar/>
-      <ProductList/>
-    </>
+      <AppRoutes/>
+    </BrowserRouter>
   )
 }
 

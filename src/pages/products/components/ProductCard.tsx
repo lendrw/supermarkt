@@ -1,4 +1,5 @@
 import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
+import priceWithoutDiscount from "../../../shared/utils/discount";
 
 interface IProductCardProps {
   id: number;
@@ -47,7 +48,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   return (
     <div
       key={id}
-      className="rounded-lg p-4 shadow hover:shadow-md transition relative bg-white"
+      className="cursor-pointer rounded-lg p-4 shadow hover:shadow-md transition relative bg-white"
     >
       <img
         alt={title}
@@ -59,7 +60,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
         <span className="text-blue-600 font-bold">U$ {price.toFixed(2)}</span>
         {discountPercentage >= 10 && (
           <span className="text-gray-500 line-through text-sm">
-            U$ {(price / (1 - discountPercentage / 100)).toFixed(2)}
+            U$ {priceWithoutDiscount(price, discountPercentage)}
           </span>
         )}
       </div>
