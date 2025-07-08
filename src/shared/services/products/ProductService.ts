@@ -1,5 +1,5 @@
-import { Environment } from "../../environment";
 import { Api } from "../axios-config";
+import { Environment } from "../../environment";
 
 export interface IProduct {
   id: number;
@@ -47,10 +47,24 @@ type TProductsWithCount = {
   total: number;
 };
 
-const getAll = async (): Promise<TProductsWithCount | Error> => {
-  try {
-    const response = await Api.get("/products");
+export interface ICategory {
+  slug: string;
+  name: string;
+  url: string;
+}
 
+type TCategories = {
+  data: ICategory[];
+};
+
+const getAll = async (page: number): Promise<TProductsWithCount | Error> => {
+  try {
+    const limit = Environment.LIMIT;
+    const skip = (page - 1) * limit;
+
+    const response = await Api.get(`/products?limit=${limit}&skip=${skip}`);
+
+    console.log(response);
     const data = response.data;
 
     return {
@@ -58,7 +72,6 @@ const getAll = async (): Promise<TProductsWithCount | Error> => {
       limit: data.limit,
       total: data.total,
     };
-    
   } catch (error: unknown) {
     console.error("Erro ao buscar produtos:", error);
     if (error instanceof Error) {
@@ -71,9 +84,8 @@ const getAll = async (): Promise<TProductsWithCount | Error> => {
 const getById = async (id: number): Promise<IProduct | Error> => {
   try {
     const response = await Api.get(`/products/${id}`);
-    console.log(response.data)
+    console.log(response.data);
     return response.data;
-
   } catch (error: unknown) {
     console.error("Erro ao buscar o produto:", error);
     if (error instanceof Error) {
@@ -83,7 +95,54 @@ const getById = async (id: number): Promise<IProduct | Error> => {
   }
 };
 
+const getCategories = async (limit = 0): Promise<TCategories | Error> => {
+  try {
+    const response = await Api.get(`/products/categories?limit=${limit}`);
+
+    console.log(response);
+
+    return response;
+  } catch (error: unknown) {
+    console.error("Erro ao buscar produtos:", error);
+    if (error instanceof Error) {
+      return new Error(error.message || "Erro ao listar os produtos.");
+    }
+    return new Error("Erro ao listar os produtos.");
+  }
+};
+
+const getProductsByCategory = async (
+  page: number,
+  slug: string | undefined
+): Promise<TProductsWithCount | Error> => {
+  try {
+    const limit = Environment.LIMIT;
+    const skip = (page - 1) * limit;
+
+    const response = await Api.get(
+      `/products/category/${slug}?limit=${limit}&skip=${skip}`
+    );
+
+    console.log(response);
+    const data = response.data;
+
+    return {
+      products: data.products,
+      limit: data.limit,
+      total: data.total,
+    };
+  } catch (error: unknown) {
+    console.error("Erro ao buscar produtos:", error);
+    if (error instanceof Error) {
+      return new Error(error.message || "Erro ao listar os produtos.");
+    }
+    return new Error("Erro ao listar os produtos.");
+  }
+};
+
 export const ProductService = {
   getAll,
   getById,
+  getCategories,
+  getProductsByCategory,
 };

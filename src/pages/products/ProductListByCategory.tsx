@@ -1,0 +1,52 @@
+import type { IProduct } from "../../shared/services/products/ProductService";
+import { ProductService } from "../../shared/services/products/ProductService";
+import { useEffect, useMemo, useState } from "react";
+import { useDebounce } from "../../shared/hooks";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Environment } from "../../shared/environment";
+import { ProductList } from "./components";
+
+export const ProductListByCategory: React.FC = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { slug } = useParams<"slug">();
+
+  const page = useMemo(() => {
+    return Number(searchParams.get("page") || "1");
+  }, [searchParams]);
+
+  const { debounce } = useDebounce();
+
+  useEffect(() => {
+    setIsLoading(true);
+
+    debounce(() => {
+      ProductService.getProductsByCategory(page, slug).then((result) => {
+        setIsLoading(false);
+
+        if (result instanceof Error) {
+          setError(result.message);
+        } else {
+          setProducts(result.products);
+          setTotal(result.total);
+          setTotalPages(Math.ceil(result.total / Environment.LIMIT));
+        }
+      });
+    });
+  }, [debounce, page, slug]);
+
+  return (
+    <ProductList
+      isLoading={isLoading}
+      error={error}
+      products={products}
+      total={total}
+      totalPages={totalPages}
+      page={page}
+    />
+  );
+};

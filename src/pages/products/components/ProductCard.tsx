@@ -1,5 +1,6 @@
+import { useNavigate } from "react-router-dom";
 import priceWithoutDiscount from "../../../shared/utils/discount";
-import { RenderStars } from './RenderStars';
+import { RenderStars } from "./RenderStars";
 
 interface IProductCardProps {
   id: number;
@@ -18,10 +19,14 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   rating,
   discountPercentage,
 }) => {
+
+  const navigate = useNavigate();
+
   return (
     <div
       key={id}
       className="cursor-pointer rounded-lg p-4 shadow hover:shadow-md transition relative bg-white"
+      onClick={() => {navigate(`/products/${id}`)}}
     >
       <img
         alt={title}
@@ -37,12 +42,12 @@ export const ProductCard: React.FC<IProductCardProps> = ({
           </span>
         )}
       </div>
-      <p className="flex gap-1 items-center justify-end mt-1">
-        <RenderStars rating={rating}/>
-      </p>
+      <div className="flex gap-1 items-center justify-end mt-1">
+        <RenderStars rating={rating} />
+      </div>
       {discountPercentage >= 10 && (
-        <p className="bg-yellow-200 text-red-500 text-lg font-bold rounded-md absolute p-1 top-0 right-0">
-          {discountPercentage.toFixed(0)}% OFF
+        <p className="bg-yellow-200 text-red-500 text-md font-bold rounded-md absolute p-1 top-0 right-0">
+          -{discountPercentage.toFixed(0)}%
         </p>
       )}
     </div>

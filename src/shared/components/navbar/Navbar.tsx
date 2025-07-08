@@ -1,11 +1,19 @@
 import React from "react";
 import { SiCoinmarketcap } from "react-icons/si";
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="fixed h-[60px] top-0 left-0 right-0 z-50 bg-white shadow-md px-6 py-4 flex items-center justify-between">
-      <div className="flex text-xl font-bold text-blue-600">
+      <div
+        className="flex text-xl font-bold text-blue-600 cursor-pointer"
+        onClick={() => {
+          navigate(`/home`);
+        }}
+      >
         Super
         <SiCoinmarketcap className="w-7 h-7 text-orange-500" />
         arkt
