@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BaseLayout } from "../../shared/layouts";
-import type { IProduct } from "../../shared/services/products/ProductService";
-import { ProductService } from "../../shared/services/products/ProductService";
+import type { IProduct } from "../../shared/services/api/products/ProductService";
+import { ProductService } from "../../shared/services/api/products/ProductService";
 import { useParams } from "react-router-dom";
 import {
   ProductSpecsSection,
@@ -45,8 +45,8 @@ export const ProductDetails: React.FC = () => {
         <ProductDescriptionSection product={product} />
         <ProductSpecsSection product={product} />
       </div>
-      <div  className="w-full p-5">
-        <ProductReviews product={product}/>
+      <div className="w-full p-5">
+        <ProductReviews product={product} />
       </div>
     </BaseLayout>
   );

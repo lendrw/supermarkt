@@ -1,4 +1,4 @@
-import type { IProduct } from "../../../shared/services/products/ProductService";
+import type { IProduct } from "../../../shared/services/api/products/ProductService";
 
 interface Props {
   product: IProduct;

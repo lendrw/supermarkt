@@ -1,5 +1,5 @@
 import { Api } from "../axios-config";
-import { Environment } from "../../environment";
+import { Environment } from "../../../environment";
 
 export interface IProduct {
   id: number;

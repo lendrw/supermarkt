@@ -19,15 +19,15 @@ export const CategoryCard: React.FC<ICategoryCardProps> = ({
   return (
     <div
       key={id}
-      className="cursor-pointer w-40 h-40 p-4 hover:shadow-md transition relative flex flex-col items-center justify-center text-center"
+      className="cursor-pointer w-40 h-40 p-4 transition relative flex flex-col items-center justify-center text-center"
       onClick={() => {
         navigate(`/products/category/${slug}`);
       }}
     >
-      <div className="text-4xl w-20 h-20 text-primary mb-2 rounded-full bg-white flex flex-col items-center justify-center">
+      <div className="text-4xl w-20 h-20 text-blue-700 text-primary mb-2 rounded-full bg-white flex flex-col items-center justify-center">
         {icon}
       </div>
-      <h2 className="text-sm text-center mb-2 ">
+      <h2 className="text-sm text-center mb-2 text-white font-semibold">
         {title}
       </h2>
     </div>

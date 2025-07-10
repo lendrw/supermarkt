@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { BaseLayout } from "../../shared/layouts";
 import { useDebounce } from "../../shared/hooks";
-import { ProductService } from "../../shared/services/products/ProductService";
-import type { ICategory } from "../../shared/services/products/ProductService";
+import { ProductService } from "../../shared/services/api/products/ProductService";
+import type { ICategory } from "../../shared/services/api/products/ProductService";
 import { CategoryCard } from "./components/CategoryCard";
 import {
   LuBrush,
@@ -83,7 +83,7 @@ export const Home = () => {
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const container = scrollRef.current;
-      const scrollAmount = 200;
+      const scrollAmount = container.clientWidth;
       container.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -96,11 +96,11 @@ export const Home = () => {
       {isLoading && <p className="text-center">Carregando categorias...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
       {!isLoading && !error && (
-        <div className="relative px-8">
+        <div className="relative px-8 bg-blue-900">
           {/* Botão esquerdo */}
           <button
             onClick={() => scroll("left")}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
           >
             <LuChevronLeft size={20} />
           </button>
@@ -108,7 +108,7 @@ export const Home = () => {
           {/* Container com rolagem horizontal */}
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto no-scrollbar gap-2 whitespace-nowrap scroll-smooth"
+            className="flex overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth bg-blue-900"
           >
             {categories.map((category, index) => {
               const Icon =
@@ -129,7 +129,7 @@ export const Home = () => {
           {/* Botão direito */}
           <button
             onClick={() => scroll("right")}
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
           >
             <LuChevronRight size={20} />
           </button>
