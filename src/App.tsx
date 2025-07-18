@@ -3,13 +3,16 @@ import "./App.css";
 import { Navbar } from "./shared/components";
 import { AppRoutes } from "./routes";
 import { AuthProvider } from "./shared/contexts";
+import { SearchProvider } from "./shared/contexts/SearchContext";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Navbar />
-        <AppRoutes />
+        <SearchProvider>
+          <Navbar />
+          <AppRoutes />
+        </SearchProvider>
       </BrowserRouter>
     </AuthProvider>
   );

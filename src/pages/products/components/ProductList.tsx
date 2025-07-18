@@ -1,12 +1,11 @@
-// src/shared/components/ProductList.tsx
-
 import { Box, Pagination } from "@mui/material";
 import { ProductCard } from "../../../pages/products/components";
 import { BaseLayout } from "../../../shared/layouts";
-import type { IProduct } from "../../../shared/services";
+import type { IProduct } from "../../../shared/services/api";
 import { useSearchParams } from "react-router-dom";
 
 interface ProductListProps {
+  title?: string;
   isLoading: boolean;
   error?: string | null;
   products: IProduct[];
@@ -16,6 +15,7 @@ interface ProductListProps {
 }
 
 export const ProductList: React.FC<ProductListProps> = ({
+  title,
   isLoading,
   error,
   products,
@@ -26,7 +26,7 @@ export const ProductList: React.FC<ProductListProps> = ({
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <BaseLayout>
+    <BaseLayout title={title}>
       <div className="p-6">
         {error && <p className="text-red-500">{error}</p>}
 
@@ -46,15 +46,17 @@ export const ProductList: React.FC<ProductListProps> = ({
         </div>
       </div>
 
-      {!isLoading && total > 10 && (
+      {!isLoading && total > 10 && totalPages > 1 && (
         <Box margin={3} display="flex" justifyContent="center">
           <Pagination
             sx={{ display: "flex" }}
             page={page}
             count={Math.min(totalPages, 500)}
-            onChange={(_, newPage) =>
-              setSearchParams({ page: newPage.toString() }, { replace: true })
-            }
+            onChange={(_, newPage) => {
+              const params = new URLSearchParams(searchParams);
+              params.set("page", newPage.toString());
+              setSearchParams(params, { replace: true });
+            }}
           />
         </Box>
       )}

@@ -1,10 +1,34 @@
 import React from "react";
 import { SiCoinmarketcap } from "react-icons/si";
 import { FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { RiShoppingCartLine } from "react-icons/ri";
+import { NavLinks } from "./components/NavLinks";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    if (value.trim() !== "") {
+      navigate(`/products/search/${value}`);
+    } else {
+      navigate(`/home`);
+    }
+  };
+
+  const links = [
+    { label: "Login", onClick: () => console.log("Login") },
+    { label: "Início", onClick: () => console.log("Início") },
+    { label: "Sobre", onClick: () => console.log("Sobre") },
+    { label: "Favoritos", onClick: () => console.log("Favoritos") },
+    {
+      label: "",
+      icon: <RiShoppingCartLine />,
+      onClick: () => console.log("Carrinho"),
+    },
+  ];
 
   return (
     <nav className="fixed h-[60px] top-0 left-0 right-0 z-50 bg-white shadow-md px-6 py-4 flex items-center justify-between">
@@ -23,6 +47,7 @@ export const Navbar: React.FC = () => {
           type="text"
           placeholder="Search for a product"
           className="border border-blue-500 rounded-l-lg px-3 py-1 focus:outline-none placeholder-gray-400 placeholder:text-sm"
+          onChange={handleChange}
         />
         <button
           type="submit"
@@ -31,13 +56,7 @@ export const Navbar: React.FC = () => {
           <FaSearch className="w-4 h-4" />
         </button>
       </form>
-      <ul className="flex gap-6 text-gray-700 font-medium">
-        <li className="hover:text-blue-500 cursor-pointer">Início</li>
-        <li className="hover:text-blue-500 cursor-pointer">Sobre</li>
-        <li className="hover:text-blue-500 cursor-pointer">Favoritos</li>
-        <li className="hover:text-blue-500 cursor-pointer">Carrinho</li>
-        <li className="hover:text-blue-500 cursor-pointer">Login</li>
-      </ul>
+      <NavLinks links={links} />
     </nav>
   );
 };

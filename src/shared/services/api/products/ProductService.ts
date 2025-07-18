@@ -62,10 +62,10 @@ const getAll = async (page: number): Promise<TProductsWithCount | Error> => {
     const limit = Environment.LIMIT;
     const skip = (page - 1) * limit;
 
-    const response = await Api.get(`/products?limit=${limit}&skip=${skip}`);
+    const res = await Api.get(`/products?limit=${limit}&skip=${skip}`);
 
-    console.log(response);
-    const data = response.data;
+    //console.log(res);
+    const data = res.data;
 
     return {
       products: data.products,
@@ -83,9 +83,9 @@ const getAll = async (page: number): Promise<TProductsWithCount | Error> => {
 
 const getById = async (id: number): Promise<IProduct | Error> => {
   try {
-    const response = await Api.get(`/products/${id}`);
-    console.log(response.data);
-    return response.data;
+    const res = await Api.get(`/products/${id}`);
+    console.log(res.data);
+    return res.data;
   } catch (error: unknown) {
     console.error("Erro ao buscar o produto:", error);
     if (error instanceof Error) {
@@ -97,11 +97,11 @@ const getById = async (id: number): Promise<IProduct | Error> => {
 
 const getCategories = async (limit = 0): Promise<TCategories | Error> => {
   try {
-    const response = await Api.get(`/products/categories?limit=${limit}`);
+    const res = await Api.get(`/products/categories?limit=${limit}`);
 
-    console.log(response);
+    //console.log(res);
 
-    return response;
+    return res;
   } catch (error: unknown) {
     console.error("Erro ao buscar produtos:", error);
     if (error instanceof Error) {
@@ -119,12 +119,12 @@ const getProductsByCategory = async (
     const limit = Environment.LIMIT;
     const skip = (page - 1) * limit;
 
-    const response = await Api.get(
+    const res = await Api.get(
       `/products/category/${slug}?limit=${limit}&skip=${skip}`
     );
 
-    console.log(response);
-    const data = response.data;
+    console.log(res);
+    const data = res.data;
 
     return {
       products: data.products,
@@ -140,9 +140,41 @@ const getProductsByCategory = async (
   }
 };
 
+const getSearchProduct = async (
+  page: number,
+  query: string
+): Promise<TProductsWithCount | Error> => {
+  try {
+    const limit = Environment.LIMIT;
+    const skip = (page - 1) * limit;
+
+    const res = await Api.get(
+      `/products/search?q=${query}&limit=${limit}&skip=${skip}`
+    );
+    console.log(res)
+
+    const data = res.data;
+
+    return {
+      products: data.products,
+      limit: data.limit,
+      total: data.total,
+    };
+  } catch (error: unknown) {
+    console.error(error);
+
+    if (error instanceof Error) {
+      return new Error(error.message);
+    }
+
+    return new Error("Failed to load the products.");
+  }
+};
+
 export const ProductService = {
   getAll,
   getById,
   getCategories,
   getProductsByCategory,
+  getSearchProduct,
 };
