@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { SiCoinmarketcap } from "react-icons/si";
 import { FaSearch } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
@@ -70,6 +70,21 @@ export const Navbar: React.FC = () => {
     },
   ];
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        setIsVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <nav className="fixed h-[60px] top-0 left-0 right-0 z-50 bg-white shadow-md px-6 py-4 flex items-center justify-between">
       <div
@@ -83,7 +98,7 @@ export const Navbar: React.FC = () => {
         arkt
       </div>
 
-      <form className="flex" onSubmit={handleSubmit}>
+      <form ref={formRef} className="flex" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Search for a product"
