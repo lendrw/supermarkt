@@ -151,7 +151,7 @@ const getSearchProduct = async (
     const res = await Api.get(
       `/products/search?q=${query}&limit=${limit}&skip=${skip}`
     );
-    console.log(res)
+    console.log(res);
 
     const data = res.data;
 
