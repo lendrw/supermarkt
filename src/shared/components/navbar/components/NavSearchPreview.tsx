@@ -1,5 +1,6 @@
 import type { IProduct } from "../../../services/api";
 import { useNavigate } from "react-router-dom";
+import { LoadingSpinner } from "../../index";
 
 interface NavSearchPreviewProps {
   products: IProduct[];
@@ -20,8 +21,8 @@ export const NavSearchPreview: React.FC<NavSearchPreviewProps> = ({
 
   return (
     isVisible && (
-      <div className="w-100 h-60 bg-white absolute rounded-lg top-14 shadow-lg p-4 z-50">
-        {isLoading && <p>Carregando...</p>}
+      <div className="w-100 h-60 bg-white absolute rounded-lg top-14 shadow-lg p-4 z-50 flex flex-col">
+        {isLoading && <LoadingSpinner/>}
 
         {error && <p className="text-red-500">{error}</p>}
 

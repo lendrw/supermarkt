@@ -5,6 +5,8 @@ import { useDebounce } from "../../shared/hooks";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Environment } from "../../shared/environment";
 import { ProductList } from "./components";
+import { BaseLayout } from "../../shared/layouts";
+import { LoadingSpinner } from "../../shared/components";
 
 export const ProductListByCategory: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -40,13 +42,19 @@ export const ProductListByCategory: React.FC = () => {
   }, [debounce, page, slug]);
 
   return (
-    <ProductList
-      isLoading={isLoading}
-      error={error}
-      products={products}
-      total={total}
-      totalPages={totalPages}
-      page={page}
-    />
+    <BaseLayout>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <ProductList
+          isLoading={isLoading}
+          page={page}
+          products={products}
+          total={total}
+          totalPages={totalPages}
+          error={error}
+        />
+      )}
+    </BaseLayout>
   );
 };

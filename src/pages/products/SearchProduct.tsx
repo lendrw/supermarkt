@@ -5,6 +5,8 @@ import { useDebounce } from "../../shared/hooks";
 import { useParams } from "react-router-dom";
 import { Environment } from "../../shared/environment";
 import { ProductList } from "./components";
+import { LoadingSpinner } from "../../shared/components";
+import { BaseLayout } from "../../shared/layouts";
 
 export const SearchProduct = () => {
   const { query = "", page = "1" } = useParams<{
@@ -41,18 +43,22 @@ export const SearchProduct = () => {
         setIsLoading(false);
       });
     });
-
-    
   }, [debounce, query, page]);
 
   return (
-    <ProductList
-      isLoading={isLoading}
-      page={Number(page)}
-      products={products}
-      total={total}
-      totalPages={totalPages}
-      error={error}
-    />
+    <BaseLayout>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <ProductList
+          isLoading={isLoading}
+          page={Number(page)}
+          products={products}
+          total={total}
+          totalPages={totalPages}
+          error={error}
+        />
+      )}
+    </BaseLayout>
   );
 };

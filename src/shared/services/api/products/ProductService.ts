@@ -57,14 +57,22 @@ type TCategories = {
   data: ICategory[];
 };
 
+function handleApiError(error: unknown, fallbackMessage: string): Error {
+  console.error(fallbackMessage, error);
+
+  if (error instanceof Error) {
+    return new Error(error.message || fallbackMessage);
+  }
+
+  return new Error(fallbackMessage);
+}
+
 const getAll = async (page: number): Promise<TProductsWithCount | Error> => {
   try {
     const limit = Environment.LIMIT;
     const skip = (page - 1) * limit;
-
     const res = await Api.get(`/products?limit=${limit}&skip=${skip}`);
 
-    //console.log(res);
     const data = res.data;
 
     return {
@@ -72,12 +80,8 @@ const getAll = async (page: number): Promise<TProductsWithCount | Error> => {
       limit: data.limit,
       total: data.total,
     };
-  } catch (error: unknown) {
-    console.error("Erro ao buscar produtos:", error);
-    if (error instanceof Error) {
-      return new Error(error.message || "Erro ao listar os produtos.");
-    }
-    return new Error("Erro ao listar os produtos.");
+  } catch (error) {
+    return handleApiError(error, "Failed to fetch products.");
   }
 };
 
@@ -86,12 +90,8 @@ const getById = async (id: number): Promise<IProduct | Error> => {
     const res = await Api.get(`/products/${id}`);
     console.log(res.data);
     return res.data;
-  } catch (error: unknown) {
-    console.error("Erro ao buscar o produto:", error);
-    if (error instanceof Error) {
-      return new Error(error.message || "Erro ao mostrar o produto.");
-    }
-    return new Error("Erro ao mostrar o produto.");
+  } catch (error) {
+    return handleApiError(error, "Failed to fetch product.");
   }
 };
 
@@ -99,15 +99,9 @@ const getCategories = async (limit = 0): Promise<TCategories | Error> => {
   try {
     const res = await Api.get(`/products/categories?limit=${limit}`);
 
-    //console.log(res);
-
     return res;
-  } catch (error: unknown) {
-    console.error("Erro ao buscar produtos:", error);
-    if (error instanceof Error) {
-      return new Error(error.message || "Erro ao listar os produtos.");
-    }
-    return new Error("Erro ao listar os produtos.");
+  } catch (error) {
+    return handleApiError(error, "Failed to fetch categories.");
   }
 };
 
@@ -131,12 +125,8 @@ const getProductsByCategory = async (
       limit: data.limit,
       total: data.total,
     };
-  } catch (error: unknown) {
-    console.error("Erro ao buscar produtos:", error);
-    if (error instanceof Error) {
-      return new Error(error.message || "Erro ao listar os produtos.");
-    }
-    return new Error("Erro ao listar os produtos.");
+  } catch (error) {
+    return handleApiError(error, "Failed to fetch products.");
   }
 };
 
@@ -160,14 +150,8 @@ const getSearchProduct = async (
       limit: data.limit,
       total: data.total,
     };
-  } catch (error: unknown) {
-    console.error(error);
-
-    if (error instanceof Error) {
-      return new Error(error.message);
-    }
-
-    return new Error("Failed to load the products.");
+  } catch (error) {
+    return handleApiError(error, "Failed to search for products.");
   }
 };
 

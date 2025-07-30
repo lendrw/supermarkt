@@ -5,18 +5,31 @@ interface RenderStarsProps {
   size?: number;
 }
 
-export const RenderStars: React.FC<RenderStarsProps> = ({ rating, size = 16 }) => {
+export const RenderStars: React.FC<RenderStarsProps> = ({
+  rating,
+  size = 16,
+}) => {
   const stars = [];
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating - fullStars >= 0.5;
 
   for (let i = 0; i < fullStars; i++) {
-    stars.push(<FaStar key={i} className={`text-yellow-400`} style={{ width: size, height: size }} />);
+    stars.push(
+      <FaStar
+        key={i}
+        className={`text-yellow-400`}
+        style={{ width: size, height: size }}
+      />
+    );
   }
 
   if (hasHalfStar) {
     stars.push(
-      <FaStarHalfAlt key="half" className={`text-yellow-400`} style={{ width: size, height: size }} />
+      <FaStarHalfAlt
+        key="half"
+        className={`text-yellow-400`}
+        style={{ width: size, height: size }}
+      />
     );
   }
 

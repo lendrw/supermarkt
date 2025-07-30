@@ -10,6 +10,7 @@ import {
   ProductCarousel,
   ProductReviews,
 } from "./components";
+import { LoadingSpinner } from "../../shared/components";
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<"id">();
@@ -26,28 +27,28 @@ export const ProductDetails: React.FC = () => {
     });
   }, [id]);
 
-  if (!product || isLoading) {
-    return (
-      <BaseLayout title="Loading...">
-        <div></div>
-      </BaseLayout>
-    );
-  }
-
   return (
-    <BaseLayout title={product.title}>
-      <div className="flex justify-center p-10 gap-10">
-        <ProductCarousel product={product} />
-        <ProductInfoCard product={product} />
-      </div>
+    <BaseLayout>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : product ? (
+        <>
+          <div className="flex justify-center p-10 gap-10">
+            <ProductCarousel product={product} />
+            <ProductInfoCard product={product} />
+          </div>
 
-      <div className="w-full p-5">
-        <ProductDescriptionSection product={product} />
-        <ProductSpecsSection product={product} />
-      </div>
-      <div className="w-full p-5">
-        <ProductReviews product={product} />
-      </div>
+          <div className="w-full p-5">
+            <ProductDescriptionSection product={product} />
+            <ProductSpecsSection product={product} />
+          </div>
+          <div className="w-full p-5">
+            <ProductReviews product={product} />
+          </div>
+        </>
+      ) : error ? (
+        <p className="text-red-500 text-center">{error}</p>
+      ) : null}
     </BaseLayout>
   );
 };

@@ -27,9 +27,9 @@ export const ProductReviews: React.FC<Props> = ({ product }) => {
                   {new Date(review.date).toLocaleDateString()}
                 </p>
               </div>
-              <p className="text-yellow-500 font-semibold">
+              <div className="text-yellow-500 font-semibold">
                 Rating: <RenderStars rating={review.rating} />
-              </p>
+              </div>
               <p className="text-gray-700 mt-2 italic">"{review.comment}"</p>
             </div>
           ))}
