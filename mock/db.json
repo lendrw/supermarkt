@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "leandro",
+      "password": "1",
+      "email": "l@gmail.com",
+      "firstName": "Leandro",
+      "lastName": "Cabral",
+      "gender": "male",
+      "image": "https://example.com/photo.jpg",
+      "accessToken": "gggggggggg.gggggggg"
+    }
+  ]
+}

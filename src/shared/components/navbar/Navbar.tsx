@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { NavSearchPreview } from "./components/NavSearchPreview";
 import { ProductService, type IProduct } from "../../services/api";
 import { useDebounce } from "../../hooks/UseDebounce";
+import { useAuthContext } from "../../contexts";
 
 export const Navbar: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -17,6 +18,8 @@ export const Navbar: React.FC = () => {
   const { debounce } = useDebounce();
 
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { isAuthenticated, logout } = useAuthContext();
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -59,14 +62,22 @@ export const Navbar: React.FC = () => {
   };
 
   const links = [
-    { label: "Login", onClick: () => console.log("Login") },
-    { label: "Início", onClick: () => console.log("Início") },
+    {
+      label: isAuthenticated ? "Logout" : "Login",
+      onClick: () => {
+        if (isAuthenticated) {
+          logout();
+        } else {
+          navigate("/login");
+        }
+      },
+    },
     { label: "Sobre", onClick: () => console.log("Sobre") },
     { label: "Favoritos", onClick: () => console.log("Favoritos") },
     {
       label: "",
       icon: <RiShoppingCartLine />,
-      onClick: () => console.log("Carrinho"),
+      onClick: () => navigate("/cart"),
     },
   ];
 
