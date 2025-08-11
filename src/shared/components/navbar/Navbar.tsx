@@ -72,8 +72,7 @@ export const Navbar: React.FC = () => {
         }
       },
     },
-    { label: "Sobre", onClick: () => console.log("Sobre") },
-    { label: "Favoritos", onClick: () => console.log("Favoritos") },
+    { label: "Favorites", onClick: () => console.log("Favoritos") },
     {
       label: "",
       icon: <RiShoppingCartLine />,
@@ -106,7 +105,7 @@ export const Navbar: React.FC = () => {
       >
         Super
         <SiCoinmarketcap className="w-7 h-7 text-orange-500" />
-        arkt
+        arket
       </div>
 
       <form ref={formRef} className="flex" onSubmit={handleSubmit}>

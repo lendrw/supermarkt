@@ -9,49 +9,52 @@ import { VTextField, VForm, useVForm } from "../../shared/forms";
 import type { IVFormErrors } from "../../shared/forms";
 import * as yup from "yup";
 
+interface IFormData {
+  email: string;
+  password: string;
+}
+
+const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email format"),
+  password: yup.string().required("Password is required"),
+});
+
 export const Login = () => {
-  interface IFormData {
-    email: string;
-    password: string;
-  }
-
-  const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
-    email: yup.string().required("Email é obrigatório").email("Email inválido"),
-    password: yup.string().required("Senha é obrigatória"),
-  });
-
   const { login } = useAuthContext();
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const { formRef } = useVForm();
 
-  const handleSubmit = async (dados: IFormData) => {
+  const handleSubmit = async (data: IFormData) => {
     setError("");
     formRef.current?.setErrors({});
 
     try {
-      const dadosValidados = await formValidationSchema.validate(dados, {
+      const validatedData = await formValidationSchema.validate(data, {
         abortEarly: false,
       });
 
       const result = await AuthService.login(
-        dadosValidados.email,
-        dadosValidados.password
+        validatedData.email,
+        validatedData.password
       );
 
       if (result instanceof Error) {
         setError(result.message);
       } else {
         localStorage.setItem("APP_ACCESS_TOKEN", result.accessToken);
-        login(dadosValidados.email, dadosValidados.password);
+        login(validatedData.email, validatedData.password);
         navigate("/");
       }
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const validationErrors: IVFormErrors = {};
-        err.inner.forEach((error) => {
-          if (error.path) {
-            validationErrors[error.path] = error.message;
+        err.inner.forEach((validationError) => {
+          if (validationError.path) {
+            validationErrors[validationError.path] = validationError.message;
           }
         });
         formRef.current?.setErrors(validationErrors);
@@ -63,9 +66,9 @@ export const Login = () => {
     <BaseLayout className="flex flex-col items-center justify-center">
       <VForm onSubmit={handleSubmit} ref={formRef}>
         <FormCard className="w-100 h-90">
-          <h1 className="text-xl font-bold text-blue-900">Welcome : )</h1>
+          <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
           <span className="text-blue-900">
-            Please enter your login details to continue
+            Please enter your login details to continue.
           </span>
           {error && <p className="text-red-500">{error}</p>}
 
@@ -83,7 +86,7 @@ export const Login = () => {
             <VTextField
               name="password"
               type="password"
-              placeholder="your password"
+              placeholder="Your password"
               label="Password"
               autoComplete="current-password"
             />

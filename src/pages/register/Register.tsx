@@ -1,70 +1,117 @@
-import { useAuthContext } from "../../shared/contexts";
 import { useState } from "react";
 import { BaseLayout } from "../../shared/layouts";
-import { useNavigate } from "react-router-dom"; // <- importado aqui
-import { GenericInput } from "../../shared/components";
+import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../shared/services/api/auth/AuthService";
 import { FormCard } from "../../shared/utils/formCard/FormCard";
 import { FormButton } from "../../shared/utils/formButton/FormButton";
+import { VTextField, VForm, useVForm } from "../../shared/forms";
+import type { IVFormErrors } from "../../shared/forms";
+import * as yup from "yup";
+
+interface IFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email format"),
+  password: yup.string().required("Password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Please confirm your password"),
+});
 
 export const Register = () => {
-  const { login } = useAuthContext();
-
+  const { formRef } = useVForm();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (data: IFormData) => {
     setError("");
+    setSuccess("");
+    formRef.current?.setErrors({});
 
-    const result = await AuthService.login(email, password);
+    try {
+      const validatedData = await formValidationSchema.validate(data, {
+        abortEarly: false,
+      });
 
-    if (result instanceof Error) {
-      setError(result.message);
-    } else {
-      localStorage.setItem("APP_ACCESS_TOKEN", result.accessToken);
+      const result = await AuthService.register(
+        validatedData.email,
+        validatedData.password
+      );
 
-      login(email, password);
-
-      navigate("/");
+      if (!(result instanceof Error)) {
+        console.log("Registration success, will redirect in 3s");
+        setSuccess("Account created successfully! Please log in.");
+        setTimeout(() => {
+          console.log("Redirecting now...");
+          navigate("/login");
+        }, 3000);
+      }
+      
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        const validationErrors: IVFormErrors = {};
+        err.inner.forEach((validationError) => {
+          if (validationError.path) {
+            validationErrors[validationError.path] = validationError.message;
+          }
+        });
+        formRef.current?.setErrors(validationErrors);
+      }
     }
   };
 
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
-      <FormCard onSubmit={handleSubmit} className="w-100 h-110">
-        <h1 className="text-xl font-bold text-blue-900">Welcome : )</h1>
-        <span className="text-blue-900">
-          Please enter your user details to continue
-        </span>
-        {error && <p className="text-red-500">{error}</p>}
-        <div className="flex flex-col">
-          <span className="text-blue-800 font-bold text-sm">Email</span>
-          <GenericInput
-            placeholder="user@example.com"
-            type="text"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <span className="text-blue-800 font-bold text-sm">Password</span>
-          <GenericInput
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <span className="text-blue-800 font-bold text-sm">Confirm password</span>
-          <GenericInput
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <FormButton type="submit">Create account</FormButton>
-      </FormCard>
+      <VForm onSubmit={handleSubmit} ref={formRef}>
+        <FormCard className="w-100 h-110">
+          <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
+          <span className="text-blue-900">
+            Please enter your user details to continue
+          </span>
+          {error && <p className="text-red-500">{error}</p>}
+          {success && <p className="text-green-600">{success}</p>}
+
+          <div className="flex flex-col">
+            <VTextField
+              name="email"
+              type="email"
+              placeholder="user@example.com"
+              label="Email"
+              autoComplete="email"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <VTextField
+              name="password"
+              type="password"
+              label="Password"
+              autoComplete="new-password"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <VTextField
+              name="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              autoComplete="new-password"
+            />
+          </div>
+
+          <FormButton type="submit">Create Account</FormButton>
+        </FormCard>
+      </VForm>
     </BaseLayout>
   );
 };
