@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 import priceWithoutDiscount from "../../../shared/utils/discount";
 import { RenderStars } from "./RenderStars";
 import { CartButton } from "../../../shared/utils/cartButton/CartButton";
-import { useAuthContext } from "../../../shared/contexts";
-import { useCartContext } from "../../../shared/contexts"; // 👈 novo
-import { CartService } from "../../../shared/services/api";
+import { useAuthContext, useCartContext } from "../../../shared/contexts";
+import type { ICartItem } from "../../../shared/types";
+import { useEffect, useState } from "react";
 
 interface IProductCardProps {
   id: number;
@@ -24,49 +24,57 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   discountPercentage,
 }) => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthContext();
-  const { cart } = useCartContext();
+  const { isAuthenticated, userId } = useAuthContext();
+  const { cart, addToCart, increment, decrement } = useCartContext();
 
-  const { userId } = useAuthContext();
-  const { refreshCart } = useCartContext();
+  const [cartItem, setCartItem] = useState<ICartItem | undefined>(() =>
+    cart?.items.find((item) => item.productId === id)
+  );
+
+  const [isInCart, setIsInCart] = useState<boolean>(!!cartItem);
+  const [quantity, setQuantity] = useState<number>(cartItem?.quantity ?? 0);
+
+  // Atualiza os estados sempre que o cart mudar
+  useEffect(() => {
+    const item = cart?.items.find((item) => item.productId === id);
+    setCartItem(item);
+    setIsInCart(!!item);
+    setQuantity(item?.quantity ?? 0);
+  }, [cart, id]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAddToCart = async () => {
     if (!userId) return;
-    await CartService.addToCart(userId, {
-      id,
-      title,
-      thumbnail,
-      price,
-      rating,
-      discountPercentage,
-    });
-    refreshCart();
+    setIsLoading(true);
+    setError(null);
+    try {
+      await addToCart({ productId: id, price, thumbnail, title });
+    } catch (err) {
+      setError("Erro ao adicionar ao carrinho");
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleIncrement = async () => {
-    if (!userId) return;
-    await CartService.updateQuantity(userId, id, +1);
-    refreshCart();
+    if (!userId || !isInCart) return;
+    await increment(id);
   };
 
   const handleDecrement = async () => {
-    if (!userId) return;
-    await CartService.updateQuantity(userId, id, -1);
-    refreshCart();
+    if (!userId || !isInCart) return;
+    await decrement(id);
   };
-
-  const cartItem = cart?.items.find((item) => item.id === id);
-  const isInCart = !!cartItem;
-  const quantity = cartItem?.quantity ?? 0;
 
   return (
     <div className="rounded-lg p-4 shadow hover:shadow-md transition relative bg-white">
       <div
         key={id}
         className="cursor-pointer"
-        onClick={() => {
-          navigate(`/products/${id}`);
-        }}
+        onClick={() => navigate(`/products/${id}`)}
       >
         <img
           alt={title}

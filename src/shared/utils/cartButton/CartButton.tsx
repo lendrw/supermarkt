@@ -23,7 +23,7 @@ export const CartButton: React.FC<CartButtonProps> = ({
 
   const handleAddToCart = () => {
     if (!isLogged) {
-      navigate("/login"); 
+      navigate("/login");
     } else if (onAddToCart) {
       onAddToCart();
     }
@@ -33,6 +33,7 @@ export const CartButton: React.FC<CartButtonProps> = ({
     <div className="flex items-center gap-2">
       {!isInCart || !isLogged ? (
         <RoundedButton
+          type="button"
           onClick={handleAddToCart}
           className="bg-orange-500 text-white rounded-3xl p-1 px-3 text-sm cursor-pointer"
         >
@@ -40,12 +41,12 @@ export const CartButton: React.FC<CartButtonProps> = ({
         </RoundedButton>
       ) : (
         <div className="flex flex-row items-center justify-around bg-white w-24 rounded-3xl border-2 border-orange-500">
-          <RoundedButton onClick={onDecrement}>
-            <FaMinus size={14}/>
+          <RoundedButton type="button" onClick={onDecrement}>
+            <FaMinus size={14} />
           </RoundedButton>
           <span>{quantity}</span>
-          <RoundedButton onClick={onIncrement}>
-            <FaPlus size={14}/>
+          <RoundedButton type="button" onClick={onIncrement}>
+            <FaPlus size={14} />
           </RoundedButton>
         </div>
       )}

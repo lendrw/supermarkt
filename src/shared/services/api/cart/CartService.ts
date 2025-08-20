@@ -1,58 +1,56 @@
 import { Mock } from "../axios-config";
-import type { ICart, IProduct } from "../../../types";
+import type { ICart, ICartItem } from "../../../types/cart";
 
-
-
-// Função para buscar carrinho do usuário logado
 const getLoggedUserCart = async (userId: number): Promise<ICart | null> => {
-  try {
-    const { data } = await Mock.get<ICart[]>(`/carts?userId=${userId}`);
-
-    if (data.length > 0) {
-      return data[0]; // retorna o carrinho do usuário
-    }
-
-    return null; // se não existir
-  } catch (error) {
-    console.error("Erro ao buscar carrinho:", error);
-    return null;
-  }
+  const { data } = await Mock.get<ICart[]>(`/carts?userId=${userId}`);
+  return data.length > 0 ? data[0] : null;
 };
 
-const addToCart = async (userId: number, product: IProduct) => {
+const addToCart = async (userId: number, product: Omit<ICartItem, "quantity">) => {
   const cart = await getLoggedUserCart(userId);
+  const newItem: ICartItem = {
+    productId: product.productId,
+    title: product.title,
+    thumbnail: product.thumbnail,
+    price: product.price,
+    quantity: 1,
+  };
 
   if (!cart) {
-    // cria novo carrinho para o user
-    const newCart = {
-      userId,
-      items: [{ ...product, quantity: 1 }],
-    };
+    const newCart = { userId, items: [newItem] };
     await Mock.post("/carts", newCart);
     return newCart;
   } else {
-    // atualiza carrinho existente
-    const updatedItems = [...cart.items, { ...product, quantity: 1 }];
-    const updatedCart = { ...cart, items: updatedItems };
+    const existingItem = cart.items.find(item => item.productId === product.productId);
 
+    let updatedItems;
+    if (existingItem) {
+      updatedItems = cart.items.map(item =>
+        item.productId === product.productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+    } else {
+      updatedItems = [...cart.items, newItem];
+    }
+
+    const updatedCart = { ...cart, items: updatedItems };
     await Mock.put(`/carts/${cart.id}`, updatedCart);
     return updatedCart;
   }
 };
 
-const updateQuantity = async (
-  userId: number,
-  productId: number,
-  delta: number
-) => {
+const updateQuantity = async (userId: number, productId: number, delta: number) => {
   const cart = await getLoggedUserCart(userId);
   if (!cart) return null;
 
-  const updatedItems = cart.items.map((item) =>
-    item.id === productId
-      ? { ...item, quantity: Math.max(1, item.quantity + delta) } // garante >= 1
-      : item
-  );
+  const updatedItems = cart.items
+    .map(item =>
+      item.productId === productId
+        ? { ...item, quantity: item.quantity + delta }
+        : item
+    )
+    .filter(item => item.quantity > 0); // remove item se quantidade <= 0
 
   const updatedCart = { ...cart, items: updatedItems };
   await Mock.put(`/carts/${cart.id}`, updatedCart);
@@ -62,5 +60,5 @@ const updateQuantity = async (
 export const CartService = {
   getLoggedUserCart,
   addToCart,
-  updateQuantity
+  updateQuantity,
 };

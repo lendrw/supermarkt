@@ -1,31 +1,52 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { CartService } from "../services/api";
-import type { ICart } from "../services/api";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { CartService } from "../services/api/cart/CartService";
+import type { ICart, ICartItem } from "../types";
 import { useAuthContext } from "./AuthContext";
 
-interface ICartContextData {
+interface ICartContext {
   cart: ICart | null;
   refreshCart: () => Promise<void>;
+  addToCart: (product: Omit<ICartItem, "quantity">) => Promise<void>;
+  increment: (productId: number) => Promise<void>;
+  decrement: (productId: number) => Promise<void>;
 }
 
-const CartContext = createContext({} as ICartContextData);
+const CartContext = createContext<ICartContext>({} as ICartContext);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [cart, setCart] = useState<ICart | null>(null);
   const { userId } = useAuthContext();
+  const [cart, setCart] = useState<ICart | null>(null);
 
-  const refreshCart = async () => {
+  const refreshCart = useCallback(async () => {
     if (!userId) return;
-    const result = await CartService.getLoggedUserCart(userId);
-    setCart(result);
-  };
+    const c = await CartService.getLoggedUserCart(userId);
+    setCart(c);
+  }, [userId]);
+
+  const addToCart = useCallback(async (product: Omit<ICartItem, "quantity">) => {
+    if (!userId) return;
+    await CartService.addToCart(userId, product);
+    await refreshCart();
+  }, [userId, refreshCart]);
+
+  const increment = useCallback(async (productId: number) => {
+    if (!userId) return;
+    await CartService.updateQuantity(userId, productId, +1);
+    await refreshCart();
+  }, [userId, refreshCart]);
+
+  const decrement = useCallback(async (productId: number) => {
+    if (!userId) return;
+    await CartService.updateQuantity(userId, productId, -1);
+    await refreshCart();
+  }, [userId, refreshCart]);
 
   useEffect(() => {
     refreshCart();
-  }, [userId]);
+  }, [refreshCart]);
 
   return (
-    <CartContext.Provider value={{ cart, refreshCart }}>
+    <CartContext.Provider value={{ cart, refreshCart, addToCart, increment, decrement }}>
       {children}
     </CartContext.Provider>
   );

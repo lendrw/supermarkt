@@ -18,6 +18,7 @@ interface IAuthContextData {
 const AuthContext = createContext({} as IAuthContextData);
 
 const LOCAL_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
+const LOCAL_STORAGE_KEY__USER_ID = "APP_USER_ID";
 
 interface IAuthProviderProps {
   children: React.ReactNode;
@@ -29,7 +30,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
-    setAccessToken(token ?? undefined);
+    const savedUserId = localStorage.getItem(LOCAL_STORAGE_KEY__USER_ID);
+
+    if (token) setAccessToken(token);
+    if (savedUserId) setUserId(Number(savedUserId));
   }, []);
 
   const handleLogin = useCallback(async (email: string, password: string) => {
@@ -42,12 +46,14 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
       if (result.userId) {
         setUserId(result.userId);
+        localStorage.setItem(LOCAL_STORAGE_KEY__USER_ID, String(result.userId)); // 🔑 salva também o userId
       }
     }
   }, []);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_KEY__USER_ID); // 🔑 limpa também
     setAccessToken(undefined);
     setUserId(undefined);
   }, []);
