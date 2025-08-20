@@ -95,7 +95,7 @@ export const CategoryBar: React.FC = () => {
       {isLoading && !error && (
         <div className="relative px-8 bg-blue-900">
           <div className="flex overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth bg-blue-900">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(12)].map((_, i) => (
               <div key={i} className="inline-block">
                 <CategoryCard
                   isLoading={true}

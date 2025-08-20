@@ -1,5 +1,5 @@
 export const LoadingSpinner = () => (
-  <div className="flex justify-center items-center flex-1">
+  <div className="flex justify-center items-center h-[calc(100vh-60px)]">
     <svg
       className="animate-spin h-8 w-8 text-blue-500"
       xmlns="http://www.w3.org/2000/svg"

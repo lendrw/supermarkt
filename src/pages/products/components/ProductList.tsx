@@ -26,7 +26,7 @@ export const ProductList: React.FC<ProductListProps> = ({
 
   return (
     <BaseLayout>
-      <div className="p-6 w-screen">
+      <div className="p-6">
         {error && <p className="text-red-500">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

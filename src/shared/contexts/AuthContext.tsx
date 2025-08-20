@@ -1,50 +1,71 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { AuthService } from "../services/api/auth/AuthService";
 
 interface IAuthContextData {
-    logout: () => void;
-    isAuthenticated: boolean;
-    login: (email: string, password: string) => Promise<string | void>;
+  logout: () => void;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<string | void>;
+  userId?: number;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
 
-const LOCAL_STORAGE_KEY__ACCESS_TOKEN = 'APP_ACCESS_TOKEN';
+const LOCAL_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
 
 interface IAuthProviderProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
-    const [accessToken, setAccessToken] = useState<string>();
+  const [accessToken, setAccessToken] = useState<string>();
+  const [userId, setUserId] = useState<number>();
 
-    useEffect(() => {
-        const token = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
-        setAccessToken(token ?? undefined);
-    }, []);
-    
-    const handleLogin = useCallback(async (email: string, password: string) => {
-        const result = await AuthService.login(email, password);
-        if (result instanceof Error) {
-            return result.message;
-        } else {
-            localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, result.accessToken);
-            setAccessToken(result.accessToken);
-        }
-    }, []);
+  useEffect(() => {
+    const token = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
+    setAccessToken(token ?? undefined);
+  }, []);
 
-    const handleLogout = useCallback(() => {
-        localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
-        setAccessToken(undefined);
-    }, []);
+  const handleLogin = useCallback(async (email: string, password: string) => {
+    const result = await AuthService.login(email, password);
+    if (result instanceof Error) {
+      return result.message;
+    } else {
+      localStorage.setItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN, result.accessToken);
+      setAccessToken(result.accessToken);
 
-    const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
+      if (result.userId) {
+        setUserId(result.userId);
+      }
+    }
+  }, []);
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login: handleLogin, logout: handleLogout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
+    setAccessToken(undefined);
+    setUserId(undefined);
+  }, []);
+
+  const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        login: handleLogin,
+        logout: handleLogout,
+        userId,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuthContext = () => useContext(AuthContext);

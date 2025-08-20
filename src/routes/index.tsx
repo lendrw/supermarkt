@@ -8,67 +8,39 @@ import {
   Login,
   SearchProduct,
   Register,
+  Cart,
 } from "../pages";
 import { PrivateRoute } from "./PrivateRoute";
-import { PublicRoute } from "./PublicRoute";
-
 
 export const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
 
-      <Route
-        path="/register"
-        element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
-        }
-      />
+      <Route path="/login" element={<Login />} />
 
-      <Route
-        path="/products/:id"
-        element={
-          <PublicRoute>
-            <ProductDetails />
-          </PublicRoute>
-        }
-      />
+      <Route path="/register" element={<Register />} />
 
-      <Route
-        path="/products"
-        element={
-          <PublicRoute>
-            <AllProducts />
-          </PublicRoute>
-        }
-      />
+      <Route path="/products/:id" element={<ProductDetails />} />
+
+      <Route path="/products" element={<AllProducts />} />
 
       <Route
         path="/products/category/:slug"
-        element={
-          <PublicRoute>
-            <ProductListByCategory />
-          </PublicRoute>
-        }
+        element={<ProductListByCategory />}
       />
 
       <Route
         path="/products/search/:query/:page?"
+        element={<SearchProduct />}
+      />
+
+      <Route
+        path="/cart"
         element={
-          <PublicRoute>
-            <SearchProduct />
-          </PublicRoute>
+          <PrivateRoute>
+            <Cart />
+          </PrivateRoute>
         }
       />
 

@@ -1,16 +1,7 @@
+import type { IAuth, IUser } from "../../../types";
 import { Mock } from "../axios-config";
 
-interface IUser {
-  id: number;
-  email: string;
-  password: string;
-  accessToken: string;
-}
 
-interface IAuth {
-  accessToken: string;
-  userId: number;
-}
 
 const login = async (
   email: string,
