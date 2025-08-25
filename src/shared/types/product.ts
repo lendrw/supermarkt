@@ -53,3 +53,8 @@ export interface ICategory {
 export type TCategories = {
   data: ICategory[];
 };
+
+export interface ISearchContextType {
+  query: string;
+  setQuery: (query: string) => void;
+}
