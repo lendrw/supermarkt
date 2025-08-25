@@ -1,3 +1,6 @@
-export * from "./AuthContext";
-export * from "./SearchContext";
-export * from "./CartContext";
+import { useContext } from "react";
+import { CartContext } from "./CartContext/CartContext";
+import { AuthContext } from "./AuthContext/AuthContext";
+
+export const useCartContext = () => useContext(CartContext);
+export const useAuthContext = () => useContext(AuthContext);

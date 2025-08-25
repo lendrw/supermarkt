@@ -7,12 +7,14 @@ interface RoundedButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const RoundedButton: React.FC<RoundedButtonProps> = ({
   className,
+  type = "button", 
   ...props
 }) => {
   return (
     <button
+      type={type}
       className={clsx("cursor-pointer rounded-3xl", className)}
       {...props}
-    ></button>
+    />
   );
 };

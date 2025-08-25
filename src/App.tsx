@@ -2,8 +2,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { Navbar } from "./shared/components";
 import { AppRoutes } from "./routes";
-import { AuthProvider } from "./shared/contexts/AuthContext";
-import { CartProvider } from "./shared/contexts/CartContext";
+import { AuthProvider } from "./shared/contexts/AuthContext/AuthProvider";
+import { CartProvider } from "./shared/contexts/CartContext/CartProvider";
 import { SearchProvider } from "./shared/contexts/SearchContext";
 
 function App() {

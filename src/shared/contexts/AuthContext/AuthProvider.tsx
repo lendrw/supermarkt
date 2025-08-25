@@ -1,21 +1,6 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { AuthService } from "../services/api/auth/AuthService";
-
-interface IAuthContextData {
-  logout: () => void;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<string | void>;
-  userId?: number;
-}
-
-const AuthContext = createContext({} as IAuthContextData);
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { AuthService } from "../../services/api/auth/AuthService";
+import { AuthContext } from "./AuthContext";
 
 const LOCAL_STORAGE_KEY__ACCESS_TOKEN = "APP_ACCESS_TOKEN";
 const LOCAL_STORAGE_KEY__USER_ID = "APP_USER_ID";
@@ -73,5 +58,3 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuthContext = () => useContext(AuthContext);

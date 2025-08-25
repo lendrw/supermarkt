@@ -1,4 +1,4 @@
-import type { IProduct } from "../../shared/services/api/products/ProductService";
+
 import { ProductService } from "../../shared/services/api/products/ProductService";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../shared/hooks";

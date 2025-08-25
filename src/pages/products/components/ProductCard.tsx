@@ -34,7 +34,6 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   const [isInCart, setIsInCart] = useState<boolean>(!!cartItem);
   const [quantity, setQuantity] = useState<number>(cartItem?.quantity ?? 0);
 
-  // Atualiza os estados sempre que o cart mudar
   useEffect(() => {
     const item = cart?.items.find((item) => item.productId === id);
     setCartItem(item);
@@ -42,13 +41,14 @@ export const ProductCard: React.FC<IProductCardProps> = ({
     setQuantity(item?.quantity ?? 0);
   }, [cart, id]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleAddToCart = async () => {
     if (!userId) return;
     setIsLoading(true);
     setError(null);
+
     try {
       await addToCart({ productId: id, price, thumbnail, title });
     } catch (err) {
@@ -61,16 +61,32 @@ export const ProductCard: React.FC<IProductCardProps> = ({
 
   const handleIncrement = async () => {
     if (!userId || !isInCart) return;
-    await increment(id);
+    setIsLoading(true);
+
+    try {
+      await increment(id);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDecrement = async () => {
     if (!userId || !isInCart) return;
-    await decrement(id);
+    setIsLoading(true);
+
+    try {
+      await decrement(id);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="rounded-lg p-4 shadow hover:shadow-md transition relative bg-white">
+    <div className="rounded-lg flex flex-col p-4 shadow hover:shadow-md transition relative bg-white">
       <div
         key={id}
         className="cursor-pointer"
@@ -104,9 +120,11 @@ export const ProductCard: React.FC<IProductCardProps> = ({
         isInCart={isInCart}
         isLogged={isAuthenticated}
         quantity={quantity}
+        isLoading={isLoading}
         onAddToCart={handleAddToCart}
         onIncrement={handleIncrement}
         onDecrement={handleDecrement}
+        className="mt-auto"
       />
     </div>
   );

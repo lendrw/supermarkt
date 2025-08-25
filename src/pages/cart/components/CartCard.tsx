@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ICartCard {
@@ -6,6 +5,7 @@ interface ICartCard {
   title: string;
   icon: string;
   isLoading: boolean;
+  quantity: number;
 }
 
 const CartSkelleton = () => (
@@ -29,15 +29,16 @@ export const CartCard: React.FC<ICartCard> = ({
 
   return (
     <div
-      className="cursor-pointer w-40 h-40 p-4 transition relative flex flex-col items-center justify-center text-center"
+      className=""
       
     >
-      <div className="text-4xl w-20 h-20 text-blue-700 mb-2 rounded-full bg-white flex items-center justify-center">
-        {icon}
+      <div className="">
+        <img src={icon} alt={title} />
       </div>
-      <h2 className="text-sm text-center mb-2 text-white font-semibold">
+      <h2 className="">
         {title}
       </h2>
+      <p>{quantity}</p>
     </div>
   );
 };

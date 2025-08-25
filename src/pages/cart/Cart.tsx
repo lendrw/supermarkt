@@ -4,10 +4,10 @@ import { LoadingSpinner } from "../../shared/components";
 import { CartCard } from "./components/CartCard";
 import {
   CartService,
-  type ICartItem,
 } from "../../shared/services/api/cart/CartService";
 import { useDebounce } from "../../shared/hooks";
 import { useAuthContext } from "../../shared/contexts";
+import type { ICartItem } from "../../shared/types";
 
 export const Cart = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,15 +49,16 @@ export const Cart = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="">
           {!isLoading &&
             cartProducts.map((cartProduct, index) => (
               <CartCard
-                key={`${cartProduct.id}-${index}`}
+                key={`${cartProduct.productId}-${index}`}
                 icon={cartProduct.thumbnail}
-                id={cartProduct.id}
+                id={cartProduct.productId}
                 isLoading={isLoading}
                 title={cartProduct.title}
+                quantity={cartProduct.quantity}
               />
             ))}
         </div>

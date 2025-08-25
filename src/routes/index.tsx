@@ -2,7 +2,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import {
   ProductDetails,
-  AllProducts,
   ProductListByCategory,
   Home,
   Login,
@@ -22,8 +21,6 @@ export const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
 
       <Route path="/products/:id" element={<ProductDetails />} />
-
-      <Route path="/products" element={<AllProducts />} />
 
       <Route
         path="/products/category/:slug"

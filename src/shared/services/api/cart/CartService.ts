@@ -3,8 +3,21 @@ import type { ICart, ICartItem } from "../../../types/cart";
 
 const getLoggedUserCart = async (userId: number): Promise<ICart | null> => {
   const { data } = await Mock.get<ICart[]>(`/carts?userId=${userId}`);
-  return data.length > 0 ? data[0] : null;
+  
+  if (data.length === 0) return null;
+
+  const cart = data[0];
+
+  const totalProducts = cart.items.reduce((acc, item) => acc + item.quantity, 0);
+  const subtotal = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  return {
+    ...cart,
+    totalProducts,
+    subtotal,
+  };
 };
+
 
 const addToCart = async (userId: number, product: Omit<ICartItem, "quantity">) => {
   const cart = await getLoggedUserCart(userId);
@@ -50,7 +63,7 @@ const updateQuantity = async (userId: number, productId: number, delta: number) 
         ? { ...item, quantity: item.quantity + delta }
         : item
     )
-    .filter(item => item.quantity > 0); // remove item se quantidade <= 0
+    .filter(item => item.quantity > 0); 
 
   const updatedCart = { ...cart, items: updatedItems };
   await Mock.put(`/carts/${cart.id}`, updatedCart);
