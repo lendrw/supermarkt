@@ -12,6 +12,7 @@ interface IAuthProviderProps {
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   const [accessToken, setAccessToken] = useState<string>();
   const [userId, setUserId] = useState<number>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
@@ -19,6 +20,8 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
     if (token) setAccessToken(token);
     if (savedUserId) setUserId(Number(savedUserId));
+
+    setIsLoading(false);
   }, []);
 
   const handleLogin = useCallback(async (email: string, password: string) => {
@@ -49,6 +52,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        isLoading,
         login: handleLogin,
         logout: handleLogout,
         userId,

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "../../../shared/hooks";
 import { ProductService } from "../../../shared/services/api";
-import type { ICategory } from "../../../shared/services/api";
 import { CategoryCard } from "./CategoryCard";
 import {
   LuBrush,
@@ -26,6 +25,7 @@ import {
   LuChevronRight,
 } from "react-icons/lu";
 import { GiAmpleDress, GiHighHeel, GiRunningShoe } from "react-icons/gi";
+import type { ICategory } from "../../../shared/types";
 
 export const CategoryBar: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);

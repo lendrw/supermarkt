@@ -4,6 +4,11 @@ export interface ICartItem {
   thumbnail: string;
   price: number;
   quantity: number;
+  brand: string;
+  discountPercentage: number;
+  shippingInformation: string;
+  availabilityStatus: string;
+  tags: string[];
 }
 
 export interface ICart {
@@ -16,8 +21,11 @@ export interface ICart {
 
 export interface ICartContext {
   cart: ICart | null;
+  subtotal: number;
+  totalProducts: number;
   refreshCart: () => Promise<void>;
   addToCart: (product: Omit<ICartItem, "quantity">) => Promise<void>;
   increment: (productId: number) => Promise<void>;
   decrement: (productId: number) => Promise<void>;
+  deleteProduct: (productId: number) => Promise<void>;
 }

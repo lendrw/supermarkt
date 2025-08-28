@@ -10,44 +10,104 @@
       "gender": "male",
       "image": "https://example.com/photo.jpg",
       "accessToken": "gggggggggg.gggggggg"
+    },
+    {
+      "email": "j@gmail.com",
+      "password": "abc",
+      "accessToken": "764da99e-75cf-4597-99ef-b70c2d9d3b83",
+      "id": 2
     }
   ],
   "carts": [
     {
       "userId": 1,
+      "items": [],
+      "id": 1,
+      "totalProducts": 4,
+      "subtotal": 97.96000000000001
+    },
+    {
+      "userId": 2,
       "items": [
         {
-          "productId": 2,
-          "title": "Eyeshadow Palette with Mirror",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-          "price": 19.99,
-          "quantity": 1
+          "productId": 190,
+          "title": "IWC Ingenieur Automatic Steel",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/thumbnail.webp",
+          "price": 4999.99,
+          "quantity": 3,
+          "availabilityStatus": "In Stock",
+          "brand": "IWC",
+          "discountPercentage": 9.45,
+          "shippingInformation": "Ships overnight",
+          "tags": [
+            "watches",
+            "luxury watches"
+          ]
         },
         {
-          "productId": 3,
-          "title": "Powder Canister",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp",
-          "price": 14.99,
-          "quantity": 1
-        },
-        {
-          "productId": 4,
-          "title": "Red Lipstick",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp",
+          "productId": 119,
+          "title": "Olay Ultra Moisture Shea Butter Body Wash",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/skin-care/olay-ultra-moisture-shea-butter-body-wash/thumbnail.webp",
           "price": 12.99,
-          "quantity": 1
+          "quantity": 1,
+          "availabilityStatus": "In Stock",
+          "brand": "Olay",
+          "discountPercentage": 16.39,
+          "shippingInformation": "Ships in 1-2 business days",
+          "tags": [
+            "personal care",
+            "body wash"
+          ]
         },
         {
-          "productId": 6,
-          "title": "Calvin Klein CK One",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp",
-          "price": 49.99,
-          "quantity": 1
+          "productId": 118,
+          "title": "Attitude Super Leaves Hand Soap",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/thumbnail.webp",
+          "price": 8.99,
+          "quantity": 2,
+          "availabilityStatus": "In Stock",
+          "brand": "Attitude",
+          "discountPercentage": 18.49,
+          "shippingInformation": "Ships overnight",
+          "tags": [
+            "personal care",
+            "hand soap"
+          ]
+        },
+        {
+          "productId": 160,
+          "title": "Samsung Galaxy Tab S8 Plus Grey",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/thumbnail.webp",
+          "price": 599.99,
+          "quantity": 1,
+          "availabilityStatus": "In Stock",
+          "brand": "Samsung",
+          "discountPercentage": 13.31,
+          "shippingInformation": "Ships in 2 weeks",
+          "tags": [
+            "electronics",
+            "tablets"
+          ]
+        },
+        {
+          "productId": 159,
+          "title": "iPad Mini 2021 Starlight",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/thumbnail.webp",
+          "price": 499.99,
+          "quantity": 1,
+          "availabilityStatus": "In Stock",
+          "brand": "Apple",
+          "discountPercentage": 3.64,
+          "shippingInformation": "Ships in 1-2 business days",
+          "tags": [
+            "electronics",
+            "tablets"
+          ]
         }
       ],
-      "id": 1,
-      "totalProducts": 3,
-      "subtotal": 47.97
+      "id": 2,
+      "totalProducts": 7,
+      "subtotal": 15630.929999999998
     }
   ]
 }

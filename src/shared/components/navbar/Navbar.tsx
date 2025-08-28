@@ -5,9 +5,10 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import { NavLinks } from "./components/NavLinks";
 import { useNavigate } from "react-router-dom";
 import { NavSearchPreview } from "./components/NavSearchPreview";
-import { ProductService, type IProduct } from "../../services/api";
+import { ProductService } from "../../services/api";
 import { useDebounce } from "../../hooks/UseDebounce";
-import { useAuthContext } from "../../contexts";
+import { useAuthContext, useCartContext } from "../../contexts";
+import type { IProduct } from "../../types";
 
 export const Navbar: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -20,6 +21,8 @@ export const Navbar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { isAuthenticated, logout } = useAuthContext();
+
+  const { totalProducts } = useCartContext();
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -76,6 +79,11 @@ export const Navbar: React.FC = () => {
     {
       label: "",
       icon: <RiShoppingCartLine />,
+      appendix: (
+        <div className="bg-orange-500 w-5 h-5 text-white text-sm rounded-2xl flex justify-center items-center absolute top-1 left-1/1 -translate-x-1/2 -translate-y-1/2">
+          {totalProducts}
+        </div>
+      ),
       onClick: () => navigate("/cart"),
     },
   ];

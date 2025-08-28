@@ -1,6 +1,7 @@
 interface NavLink {
   label: string;
   icon?: React.ReactNode;
+  appendix?: React.ReactNode;
   onClick?: () => void;
 }
 
@@ -16,9 +17,10 @@ export const NavLinks = ({ links }: NavLinksProps) => {
           key={index}
           onClick={link.onClick}
           className={`hover:text-blue-500 cursor-pointer ${
-            link.icon ? "text-3xl flex items-center" : ""
+            link.icon ? "text-3xl relative flex items-center" : ""
           }`}
         >
+          {link.appendix}
           {link.icon ?? link.label}
         </li>
       ))}

@@ -13,6 +13,11 @@ interface IProductCardProps {
   price: number;
   rating: number;
   discountPercentage: number;
+  availabilityStatus: string;
+  brand: string;
+  shippingInformation: string;
+  tags: string[];
+  isRoundedCard?: boolean;
 }
 
 export const ProductCard: React.FC<IProductCardProps> = ({
@@ -22,6 +27,11 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   price,
   rating,
   discountPercentage,
+  availabilityStatus,
+  brand,
+  shippingInformation,
+  tags,
+  isRoundedCard = true,
 }) => {
   const navigate = useNavigate();
   const { isAuthenticated, userId } = useAuthContext();
@@ -50,7 +60,17 @@ export const ProductCard: React.FC<IProductCardProps> = ({
     setError(null);
 
     try {
-      await addToCart({ productId: id, price, thumbnail, title });
+      await addToCart({
+        productId: id,
+        price,
+        thumbnail,
+        title,
+        availabilityStatus,
+        brand,
+        discountPercentage,
+        shippingInformation,
+        tags,
+      });
     } catch (err) {
       setError("Erro ao adicionar ao carrinho");
       console.error(err);
@@ -86,7 +106,11 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   };
 
   return (
-    <div className="rounded-lg flex flex-col p-4 shadow hover:shadow-md transition relative bg-white">
+    <div
+      className={`flex flex-col p-4 shadow hover:shadow-md transition relative bg-white ${
+        isRoundedCard ? "rounded-lg" : ""
+      }`}
+    >
       <div
         key={id}
         className="cursor-pointer"

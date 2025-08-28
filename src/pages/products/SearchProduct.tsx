@@ -1,11 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
-import type { IProduct } from "../../shared/services/api/products/ProductService";
 import { ProductService } from "../../shared/services/api/products/ProductService";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Environment } from "../../shared/environment";
 import { ProductList } from "./components";
 import { LoadingSpinner } from "../../shared/components";
 import { BaseLayout } from "../../shared/layouts";
+import type { IProduct } from "../../shared/types";
 
 export const SearchProduct = () => {
   const { query = "" } = useParams<{ query: string }>();

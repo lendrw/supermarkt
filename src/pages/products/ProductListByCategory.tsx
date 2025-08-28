@@ -7,6 +7,7 @@ import { Environment } from "../../shared/environment";
 import { ProductList } from "./components";
 import { BaseLayout } from "../../shared/layouts";
 import { LoadingSpinner } from "../../shared/components";
+import type { IProduct } from "../../shared/types";
 
 export const ProductListByCategory: React.FC = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -14,7 +15,7 @@ export const ProductListByCategory: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState(0);
   const [total, setTotal] = useState(0);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { slug } = useParams<"slug">();
 
   const page = useMemo(() => {
