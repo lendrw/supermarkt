@@ -25,6 +25,7 @@ import {
   LuChevronRight,
 } from "react-icons/lu";
 import { GiAmpleDress, GiHighHeel, GiRunningShoe } from "react-icons/gi";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import type { ICategory } from "../../../shared/types";
 
 export const CategoryBar: React.FC = () => {
@@ -90,6 +91,8 @@ export const CategoryBar: React.FC = () => {
     }
   };
 
+  const [toggle, setToggle] = useState(false);
+
   return (
     <>
       {isLoading && !error && (
@@ -113,23 +116,37 @@ export const CategoryBar: React.FC = () => {
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {!isLoading && !error && (
-        <div className="relative px-8 bg-blue-900">
+        <div
+          className={
+            toggle
+              ? "absolute min-h-[calc(100vh-85px)] sm:min-h-[calc(100vh-60px)] bg-blue-900 z-10 w-full"
+              : "relative px-8  bg-blue-900"
+          }
+        >
           <button
             onClick={() => scroll("left")}
-            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
+            className={
+              toggle
+                ? "hidden"
+                : "absolute left-3 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
+            }
           >
             <LuChevronLeft size={20} />
           </button>
 
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth bg-blue-900"
+            className={
+              toggle
+                ? "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 w-full"
+                : "flex overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth"
+            }
           >
             {categories.map((category, index) => {
               const Icon =
                 categoryIcons[category.slug as keyof typeof categoryIcons];
               return (
-                <div key={index} className="inline-block">
+                <div key={index} className="flex items-center justify-center">
                   <CategoryCard
                     isLoading={false}
                     id={index}
@@ -144,10 +161,26 @@ export const CategoryBar: React.FC = () => {
 
           <button
             onClick={() => scroll("right")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
+            className={
+              toggle
+                ? "hidden"
+                : "absolute right-3 top-1/2 -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
+            }
           >
             <LuChevronRight size={20} />
           </button>
+          <div className="w-full flex items-center justify-center">
+            <button
+              onClick={() => setToggle(!toggle)}
+              className="text-white hover:bg-blue-400 active:bg-blue-500 w-8 sm:w-10 h-7 sm:h-9 rounded-3xl flex justify-center items-center transition-colors duration-300 ease-in-out"
+            >
+              {toggle ? (
+                <IoIosArrowUp size={30} />
+              ) : (
+                <IoIosArrowDown size={30} />
+              )}
+            </button>
+          </div>
         </div>
       )}
     </>

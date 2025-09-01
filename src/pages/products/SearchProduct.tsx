@@ -55,7 +55,7 @@ export const SearchProduct = () => {
   return (
     <BaseLayout>
       {isLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner isFullPage/>
       ) : error ? (
         <p className="text-center text-red-500">{error}</p>
       ) : products.length === 0 ? (

@@ -17,7 +17,7 @@ export const NavLinks = ({ links }: NavLinksProps) => {
           key={index}
           onClick={link.onClick}
           className={`hover:text-blue-500 cursor-pointer ${
-            link.icon ? "text-3xl relative flex items-center" : ""
+            link.icon ? "text-2xl relative flex items-center" : "text-sm md:text-base"
           }`}
         >
           {link.appendix}

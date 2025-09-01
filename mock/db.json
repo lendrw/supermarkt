@@ -103,11 +103,41 @@
             "electronics",
             "tablets"
           ]
+        },
+        {
+          "productId": 2,
+          "title": "Eyeshadow Palette with Mirror",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+          "price": 19.99,
+          "quantity": 2,
+          "availabilityStatus": "In Stock",
+          "brand": "Glamour Beauty",
+          "discountPercentage": 18.19,
+          "shippingInformation": "Ships in 2 weeks",
+          "tags": [
+            "beauty",
+            "eyeshadow"
+          ]
+        },
+        {
+          "productId": 1,
+          "title": "Essence Mascara Lash Princess",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
+          "price": 9.99,
+          "quantity": 1,
+          "availabilityStatus": "In Stock",
+          "brand": "Essence",
+          "discountPercentage": 10.48,
+          "shippingInformation": "Ships in 3-5 business days",
+          "tags": [
+            "beauty",
+            "mascara"
+          ]
         }
       ],
       "id": 2,
-      "totalProducts": 7,
-      "subtotal": 15630.929999999998
+      "totalProducts": 10,
+      "subtotal": 16160.899999999998
     }
   ]
 }

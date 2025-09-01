@@ -44,7 +44,7 @@ export const Home = () => {
     <BaseLayout>
       <CategoryBar />
       {isLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner isFullPage/>
       ) : (
         <ProductList
           isLoading={isLoading}

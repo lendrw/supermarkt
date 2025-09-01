@@ -1,6 +1,5 @@
 import { Box, Pagination } from "@mui/material";
 import { ProductCard } from "../../../pages/products/components";
-import { BaseLayout } from "../../../shared/layouts";
 import { useSearchParams } from "react-router-dom";
 import type { IProduct } from "../../../shared/types";
 
@@ -31,14 +30,14 @@ export const ProductList: React.FC<ProductListProps> = ({
   const [searchParams, setSearchParams] = useSearchParams();
 
   return (
-    <BaseLayout>
-      <div className={containerClassName ?? "p-6"}>
+    <div>
+      <div className={containerClassName ?? "p-2 md:p-6"}>
         {error && <p className="text-red-500">{error}</p>}
 
         <div
           className={
             gridClassName ??
-            "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6"
           }
         >
           {!isLoading &&
@@ -67,7 +66,7 @@ export const ProductList: React.FC<ProductListProps> = ({
         page &&
         total > 10 &&
         totalPages > 1 && (
-          <Box margin={3} display="flex" justifyContent="center">
+          <Box paddingBottom={2} display="flex" justifyContent="center">
             <Pagination
               sx={{ display: "flex" }}
               page={page}
@@ -80,6 +79,6 @@ export const ProductList: React.FC<ProductListProps> = ({
             />
           </Box>
         )}
-    </BaseLayout>
+    </div>
   );
 };

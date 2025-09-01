@@ -1,7 +1,20 @@
 import { FaSpinner } from "react-icons/fa";
+import { BaseLayout } from "../../layouts";
 
-export const LoadingSpinner = () => (
-  <div className="flex justify-center items-center h-[calc(100vh-60px)]">
-    <FaSpinner className="animate-spin text-blue-500 w-6" size={35} />
-  </div>
-);
+interface ILoadingSpinner {
+  className?: string;
+  isFullPage: boolean;
+}
+export const LoadingSpinner: React.FC<ILoadingSpinner> = ({
+  className,
+  isFullPage,
+}) =>
+  isFullPage ? (
+    <BaseLayout className={`flex justify-center items-center  ${className}`}>
+      <FaSpinner className="animate-spin text-blue-500 w-6" size={35} />
+    </BaseLayout>
+  ) : (
+    <div className={`flex justify-center items-center ${className}`}>
+      <FaSpinner className="animate-spin text-blue-500 w-6" size={35} />
+    </div>
+  );

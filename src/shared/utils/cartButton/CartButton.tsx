@@ -41,7 +41,7 @@ export const CartButton: React.FC<CartButtonProps> = ({
         <RoundedButton
           type="button"
           onClick={handleAddToCart}
-          className="bg-orange-500 text-white font-bold rounded-3xl p-1 px-3 w-24 h-8 text-sm cursor-pointer flex flex-row items-center justify-around"
+          className="bg-orange-500 text-white font-bold text-xs md:text-sm p-1 px-3 w-22 md:w-24 h-7 md:h-8 cursor-pointer flex flex-row items-center justify-around"
         >
           {isLoading ? (
             <FaSpinner className="animate-spin text-white" size={15} />
@@ -50,7 +50,7 @@ export const CartButton: React.FC<CartButtonProps> = ({
           )}
         </RoundedButton>
       ) : (
-        <div className="flex flex-row items-center justify-evenly bg-white w-24 h-8 rounded-3xl border-2 border-orange-500">
+        <div className="flex flex-row items-center justify-evenly bg-white w-22 md:w-24 h-7 md:h-8 rounded-3xl border-2 border-orange-500">
           <RoundedButton
             type="button"
             onClick={onDecrement}

@@ -107,7 +107,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
 
   return (
     <div
-      className={`flex flex-col p-4 shadow hover:shadow-md transition relative bg-white ${
+      className={`flex flex-col p-3 md:p-4 gap-2 md:gap-0 shadow hover:shadow-md transition relative bg-white ${
         isRoundedCard ? "rounded-lg" : ""
       }`}
     >
@@ -121,9 +121,9 @@ export const ProductCard: React.FC<IProductCardProps> = ({
           src={thumbnail}
           className="h-40 w-full object-contain mb-4"
         />
-        <h2 className="text-lg font-semibold mb-2">{title}</h2>
+        <h2 className="text-sm md:text-base font-semibold mb-2">{title}</h2>
         <div className="flex items-center gap-2">
-          <span className="text-blue-600 font-bold">U$ {price.toFixed(2)}</span>
+          <span className="text-blue-600 font-bold text-sm md:text-base">U$ {price.toFixed(2)}</span>
           {discountPercentage >= 10 && (
             <span className="text-gray-500 line-through text-sm">
               U$ {priceWithoutDiscount(price, discountPercentage)}
@@ -131,7 +131,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
           )}
         </div>
         <div className="flex gap-1 items-center justify-end mt-1">
-          <RenderStars rating={rating} />
+          <RenderStars rating={rating}/>
         </div>
         {discountPercentage >= 10 && (
           <p className="bg-yellow-200 text-red-500 text-md font-bold rounded-md absolute p-1 top-0 right-0">

@@ -45,7 +45,7 @@ export const ProductListByCategory: React.FC = () => {
   return (
     <BaseLayout>
       {isLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner isFullPage/>
       ) : (
         <ProductList
           isLoading={isLoading}

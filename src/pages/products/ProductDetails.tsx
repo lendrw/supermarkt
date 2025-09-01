@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BaseLayout } from "../../shared/layouts";
-import type { IProduct } from "../../shared/services/api/products/ProductService";
 import { ProductService } from "../../shared/services/api/products/ProductService";
 import { useParams } from "react-router-dom";
 import {
@@ -11,6 +10,7 @@ import {
   ProductReviews,
 } from "./components";
 import { LoadingSpinner } from "../../shared/components";
+import type { IProduct } from "../../shared/types";
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<"id">();
@@ -30,7 +30,7 @@ export const ProductDetails: React.FC = () => {
   return (
     <BaseLayout>
       {isLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner isFullPage/>
       ) : product ? (
         <>
           <div className="flex justify-center p-10 gap-10">

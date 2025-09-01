@@ -1,6 +1,6 @@
 import { FaShoppingCart } from "react-icons/fa";
 import priceWithoutDiscount from "../../../shared/utils/discount";
-import type { IProduct } from "../../../shared/services/api/products/ProductService";
+import type { IProduct } from "../../../shared/types";
 
 interface Props {
   product: IProduct;

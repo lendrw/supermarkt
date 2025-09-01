@@ -1,4 +1,5 @@
-import type { IProduct } from "../../../shared/services/api/products/ProductService";
+
+import type { IProduct } from "../../../shared/types";
 import { RenderStars } from "./RenderStars";
 
 interface Props {
