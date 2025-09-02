@@ -64,8 +64,8 @@ export const Login = () => {
 
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
-      <VForm onSubmit={handleSubmit} ref={formRef}>
-        <FormCard className="w-100 h-90">
+      <VForm onSubmit={handleSubmit} ref={formRef} className="w-full flex items-center justify-center">
+        <FormCard className="w-88 md:w-100 h-90 flex items-center justify-center">
           <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
           <span className="text-blue-900">
             Please enter your login details to continue.

@@ -64,7 +64,6 @@ const getProductsByCategory = async (
       `/products/category/${slug}?limit=${limit}&skip=${skip}`
     );
 
-    console.log(res);
     const data = res.data;
 
     return {

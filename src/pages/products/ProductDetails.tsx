@@ -33,16 +33,16 @@ export const ProductDetails: React.FC = () => {
         <LoadingSpinner isFullPage/>
       ) : product ? (
         <>
-          <div className="flex justify-center p-10 gap-10">
+          <div className="flex flex-col lg:flex-row justify-center items-center p-10 gap-10">
             <ProductCarousel product={product} />
             <ProductInfoCard product={product} />
           </div>
 
-          <div className="w-full p-5">
+          <div className="w-full p-5 bg-white border-b border-b-gray-300">
             <ProductDescriptionSection product={product} />
             <ProductSpecsSection product={product} />
           </div>
-          <div className="w-full p-5">
+          <div className="w-full p-5 bg-white">
             <ProductReviews product={product} />
           </div>
         </>

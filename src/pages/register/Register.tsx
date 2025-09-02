@@ -19,7 +19,10 @@ const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
     .string()
     .required("Email is required")
     .email("Invalid email format"),
-  password: yup.string().required("Password is required"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters"),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords must match")
@@ -56,7 +59,6 @@ export const Register = () => {
           navigate("/login");
         }, 3000);
       }
-      
     } catch (err) {
       if (err instanceof yup.ValidationError) {
         const validationErrors: IVFormErrors = {};
@@ -73,7 +75,7 @@ export const Register = () => {
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
       <VForm onSubmit={handleSubmit} ref={formRef}>
-        <FormCard className="w-100 h-110">
+        <FormCard className="w-88 md:w-100 h-100 md:h-110">
           <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
           <span className="text-blue-900">
             Please enter your user details to continue

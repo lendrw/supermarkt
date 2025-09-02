@@ -14,6 +14,7 @@ interface ProductListProps {
   containerClassName?: string;
   gridClassName?: string;
   isRoundedCard?: boolean;
+  hasShadow?: boolean;
 }
 
 export const ProductList: React.FC<ProductListProps> = ({
@@ -26,6 +27,7 @@ export const ProductList: React.FC<ProductListProps> = ({
   containerClassName,
   gridClassName,
   isRoundedCard,
+  hasShadow,
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -44,6 +46,7 @@ export const ProductList: React.FC<ProductListProps> = ({
             products.map((product) => (
               <ProductCard
                 isRoundedCard={isRoundedCard}
+                hasShadow={hasShadow}
                 key={product.id}
                 id={product.id}
                 title={product.title}

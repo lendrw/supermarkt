@@ -29,6 +29,9 @@ export const VTextField: React.FC<VTextFieldProps> = ({
     });
   }, [fieldName, registerField]);
 
+  // Garante que `error` pode ser array (se sua validação mandar assim)
+  const errors = Array.isArray(error) ? error : error ? [error] : [];
+
   return (
     <>
       {label && <span className="text-blue-800 font-bold text-sm">{label}</span>}
@@ -42,7 +45,15 @@ export const VTextField: React.FC<VTextFieldProps> = ({
         )}
         onFocus={clearError}
       />
-      {error && <span className="text-red-500 text-sm mt-1 block">{error}</span>}
+      {errors.length > 0 && (
+        <div className="mt-1">
+          {errors.map((err, index) => (
+            <span key={index} className="text-red-500 text-sm block">
+              {err}
+            </span>
+          ))}
+        </div>
+      )}
     </>
   );
 };

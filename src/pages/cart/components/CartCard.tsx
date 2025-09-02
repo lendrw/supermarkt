@@ -122,12 +122,12 @@ export const CartCard: React.FC<ICartCard> = ({
 
   if (isInCart)
     return (
-      <div className="shadow-md flex flex-row items-center bg-white rounded-2xl mt-5 mb-4 h-70 w-200">
+      <div className="shadow-md flex flex-row items-center bg-white rounded-2xl mt-5 mb-4 h-60 md:h-70 w-full md:w-[55vw]">
         <div className="">
-          <img className="w-50" src={icon} alt={title} />
+          <img className="w-40 lg:w-50" src={icon} alt={title} />
         </div>
-        <div className="flex flex-col justify-evenly h-65">
-          <h2 className="text-2xl">{title}</h2>
+        <div className="flex flex-col justify-evenly h-60 lg:h-65 ">
+          <h2 className="text-xl lg:text-2xl">{title}</h2>
 
           <div className="flex gap-1 text-gray-500">
             <p className="text-gray-700">Brand:</p>
@@ -146,15 +146,15 @@ export const CartCard: React.FC<ICartCard> = ({
             </div>
           )}
 
-          <p className="text-2xl font-bold text-blue-700">U$ {price}</p>
+          <p className="text-xl lg:text-2xl font-bold text-blue-700">U$ {price}</p>
           <p className="text-gray-700">{shippingInformation}</p>
-          <p className="text-green-900 bg-green-200 text-center rounded-md w-20">
+          <p className="text-green-900 bg-green-200 text-center text-sm lg:text-base rounded-md w-20">
             {availabilityStatus}
           </p>
 
           <div className="my-2">
             {(Array.isArray(tags) ? tags : []).map((tag, index) => (
-              <span key={index} className="mr-2 px-2 py-1 bg-gray-200 rounded">
+              <span key={index} className="mr-2 px-2 py-1 text-sm lg:text-base bg-gray-200 rounded">
                 {tag}
               </span>
             ))}

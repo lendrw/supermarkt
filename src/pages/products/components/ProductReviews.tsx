@@ -8,7 +8,7 @@ interface Props {
 
 export const ProductReviews: React.FC<Props> = ({ product }) => {
   return (
-    <div className="mt-10">
+    <div className="mt-2">
       <h2 className="text-2xl font-semibold mb-4 text-gray-900">
         Customer Reviews
       </h2>

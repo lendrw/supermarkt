@@ -18,9 +18,9 @@ export const ProductCarousel: React.FC<Props> = ({ product }) => {
   return (
     <>
       {/* Carousel */}
-      <div className="flex gap-4">
+      <div className="flex gap-1">
         {/* Thumbnails */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {product.images.map((imgUrl, index) => (
             <img
               key={index}
@@ -37,7 +37,7 @@ export const ProductCarousel: React.FC<Props> = ({ product }) => {
         </div>
 
         {/* Main image */}
-        <div className="w-96 h-96 rounded overflow-hidden cursor-zoom-in">
+        <div className="w-90 h-90 rounded overflow-hidden cursor-zoom-in">
           <img
             src={product.images[selectedIndex]}
             alt={`main ${selectedIndex}`}

@@ -58,18 +58,19 @@ export const CartProductRecomendation: React.FC = () => {
   }, [slug]);
 
   return (
-    <div className="bg-white mt-6 shadow-md rounded-2xl w-120 h-auto flex flex-col items-center justify-center gap-5">
-      <h2 className="font-bold text-lg mt-3">Take a look at our other products</h2>
+    <div className="bg-white mt-6 shadow-md rounded-2xl w-100 md:w-[35vw] h-auto flex flex-col items-center justify-center gap-5 p-4">
+      <h2 className="font-bold text-lg text-center mt-3">Take a look at our other products</h2>
       {isLoading ? (
-        <LoadingSpinner />
+        <LoadingSpinner isFullPage={false}/>
       ) : (
         <ProductList
           products={products}
           isLoading={isLoading}
           error={error}
           gridClassName="grid grid-col-1"
-          containerClassName="w-120"
+          containerClassName="w-80 md:w-[35vw]"
           isRoundedCard={false}
+          hasShadow={false}
         />
       )}
     </div>

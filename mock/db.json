@@ -16,6 +16,12 @@
       "password": "abc",
       "accessToken": "764da99e-75cf-4597-99ef-b70c2d9d3b83",
       "id": 2
+    },
+    {
+      "email": "w@gmail.com",
+      "password": "umasenha",
+      "accessToken": "aba42a27-07e8-4884-a2e9-972d43960eda",
+      "id": 3
     }
   ],
   "carts": [
@@ -138,6 +144,28 @@
       "id": 2,
       "totalProducts": 10,
       "subtotal": 16160.899999999998
+    },
+    {
+      "userId": 3,
+      "items": [
+        {
+          "productId": 43,
+          "title": "Decoration Swing",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/thumbnail.webp",
+          "price": 59.99,
+          "quantity": 1,
+          "availabilityStatus": "In Stock",
+          "discountPercentage": 10.41,
+          "shippingInformation": "Ships in 1 month",
+          "tags": [
+            "home decor",
+            "swing"
+          ]
+        }
+      ],
+      "id": 3,
+      "totalProducts": 0,
+      "subtotal": 0
     }
   ]
 }

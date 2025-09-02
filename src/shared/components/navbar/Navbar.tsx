@@ -79,7 +79,7 @@ export const Navbar: React.FC = () => {
     {
       label: "",
       icon: <RiShoppingCartLine />,
-      appendix: (
+      appendix: isAuthenticated && (
         <div className="bg-orange-500 w-4 h-4 md:w-5 md:h-5 text-white text-xs md:text-sm rounded-2xl flex justify-center items-center absolute top-1 left-1/1 -translate-x-1/2 -translate-y-1/2">
           {totalProducts}
         </div>

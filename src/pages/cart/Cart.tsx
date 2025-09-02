@@ -47,10 +47,10 @@ export const Cart = () => {
   }, [debounce, userId]);
 
   return (
-    <BaseLayout className="flex flex-row justify-around relative">
+    <BaseLayout className="flex flex-col md:flex-row justify-around relative p-4">
       {isLoading ? (
         <div className="shadow-md flex flex-row items-center justify-center bg-white rounded-2xl mt-5 mb-4 h-70 w-200">
-          <LoadingSpinner />
+          <LoadingSpinner isFullPage={false}/>
         </div>
       ) : (
         <div className="pt-1">
@@ -71,7 +71,7 @@ export const Cart = () => {
               />
             ))
           ) : (
-            <div className="shadow-md flex flex-row items-center bg-white rounded-2xl mt-5 mb-4 h-70 w-200">
+            <div className="shadow-md flex flex-row items-center justify-center text-xl text-blue-700 bg-white rounded-2xl mt-5 mb-4 h-60 md:h-70 w-full md:w-[55vw] lg:w-170">
               Your cart is empty
             </div>
           )}
@@ -79,13 +79,13 @@ export const Cart = () => {
       )}
       {isLoading ? (
         <div className="bg-white mt-6 shadow-md rounded-2xl w-120 h-50 flex flex-col items-center justify-center gap-5">
-          <LoadingSpinner />
+          <LoadingSpinner isFullPage={false} />
         </div>
       ) : (
         <div>
           {totalProducts > 0 ? (
-            <div className="bg-white mt-6 shadow-md rounded-2xl w-120 h-50 flex flex-col items-center justify-center gap-5">
-              <h2 className="text-2xl">
+            <div className="bg-white mt-6 shadow-md rounded-2xl w-100 md:w-[35vw] h-40 lg:h-50 flex flex-col items-center justify-center gap-5 p-2">
+              <h2 className="text-lg lg:text-2xl text-center">
                 Subtotal ({totalProducts}
                 {totalProducts > 1 ? " products" : " product"}):{" "}
                 <span className="font-bold text-blue-700">
@@ -94,7 +94,7 @@ export const Cart = () => {
               </h2>
               <RoundedButton
                 type="button"
-                className="bg-orange-500 hover:bg-orange-600 text-white h-8 w-45"
+                className="bg-orange-500 hover:bg-orange-600 text-white h-8 w-40 lg:w-45"
               >
                 Complete order
               </RoundedButton>

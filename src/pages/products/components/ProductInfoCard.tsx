@@ -8,7 +8,7 @@ interface Props {
 
 export const ProductInfoCard: React.FC<Props> = ({ product }) => {
   return (
-    <div className="flex flex-col border rounded-lg border-gray-300 shadow w-150 justify-between p-4">
+    <div className="flex gap-2 flex-col rounded-3xl shadow-lg bg-white w-[95dvw] sm:w-150 justify-between p-4">
       <h2 className="text-2xl">{product.title}</h2>
 
       <div className="flex gap-1 text-gray-500">
@@ -28,7 +28,6 @@ export const ProductInfoCard: React.FC<Props> = ({ product }) => {
         </div>
       )}
 
-      <p className="text-2xl font-bold text-blue-700">U$ {product.price}</p>
       <p className="text-gray-700">{product.shippingInformation}</p>
       <p className="text-green-900 bg-green-200 text-center rounded-md w-20">
         {product.availabilityStatus}
@@ -41,11 +40,13 @@ export const ProductInfoCard: React.FC<Props> = ({ product }) => {
           </span>
         ))}
       </div>
-
-      <button className="flex w-50 items-center justify-center gap-2 bg-blue-600 text-white text-xl px-4 py-2 rounded hover:bg-blue-700 transition">
-        <FaShoppingCart className="w-5 h-5" />
-        Buy
-      </button>
+      <div className="flex w-full justify-center gap-4 items-center">
+        <p className="text-xl sm:text-2xl font-bold text-blue-700">U$ {product.price}</p>
+        <button className="flex w-35 sm:w-45 items-center justify-center gap-2 bg-blue-600 text-white text-xl px-4 py-2 rounded hover:bg-blue-700 transition">
+          <FaShoppingCart className="w-5 h-5" />
+          Buy
+        </button>
+      </div>
     </div>
   );
 };
