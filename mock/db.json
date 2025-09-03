@@ -149,23 +149,67 @@
       "userId": 3,
       "items": [
         {
-          "productId": 43,
-          "title": "Decoration Swing",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/thumbnail.webp",
-          "price": 59.99,
+          "productId": 118,
+          "title": "Attitude Super Leaves Hand Soap",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/thumbnail.webp",
+          "price": 8.99,
+          "quantity": 2,
+          "availabilityStatus": "In Stock",
+          "brand": "Attitude",
+          "discountPercentage": 18.49,
+          "shippingInformation": "Ships overnight",
+          "tags": [
+            "personal care",
+            "hand soap"
+          ]
+        },
+        {
+          "productId": 172,
+          "title": "Blue Women's Handbag",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/thumbnail.webp",
+          "price": 49.99,
+          "quantity": 2,
+          "availabilityStatus": "In Stock",
+          "brand": "Fashionista",
+          "discountPercentage": 17.88,
+          "shippingInformation": "Ships in 1 week",
+          "tags": [
+            "fashion accessories",
+            "handbags"
+          ]
+        },
+        {
+          "productId": 177,
+          "title": "Black Women's Gown",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/thumbnail.webp",
+          "price": 129.99,
           "quantity": 1,
           "availabilityStatus": "In Stock",
-          "discountPercentage": 10.41,
-          "shippingInformation": "Ships in 1 month",
+          "discountPercentage": 10.48,
+          "shippingInformation": "Ships in 1 week",
           "tags": [
-            "home decor",
-            "swing"
+            "clothing",
+            "gowns"
+          ]
+        },
+        {
+          "productId": 180,
+          "title": "Dress Pea",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/thumbnail.webp",
+          "price": 49.99,
+          "quantity": 1,
+          "availabilityStatus": "Low Stock",
+          "discountPercentage": 17.68,
+          "shippingInformation": "Ships overnight",
+          "tags": [
+            "clothing",
+            "dresses"
           ]
         }
       ],
       "id": 3,
-      "totalProducts": 0,
-      "subtotal": 0
+      "totalProducts": 7,
+      "subtotal": 306.93
     }
   ]
 }

@@ -122,21 +122,21 @@ export const CartCard: React.FC<ICartCard> = ({
 
   if (isInCart)
     return (
-      <div className="shadow-md flex flex-row items-center bg-white rounded-2xl mt-5 mb-4 h-60 md:h-70 w-full md:w-[55vw]">
+      <div className="shadow-md flex flex-row items-center bg-white rounded-2xl h-60 md:h-70 w-full md:w-[55vw]">
         <div className="">
-          <img className="w-40 lg:w-50" src={icon} alt={title} />
+          <img className="w-30 md:w-35 lg:w-50" src={icon} alt={title} />
         </div>
-        <div className="flex flex-col justify-evenly h-60 lg:h-65 ">
-          <h2 className="text-xl lg:text-2xl">{title}</h2>
+        <div className="flex flex-col justify-evenly h-54 md:h-60 lg:h-65 ">
+          <h2 className="text-base md:text-xl lg:text-2xl">{title}</h2>
 
-          <div className="flex gap-1 text-gray-500">
+          <div className="flex gap-1 text-gray-500 text-sm md:text-base">
             <p className="text-gray-700">Brand:</p>
             <p className="underline text-gray-700">{brand}</p>
             <p>- Id: {id}</p>
           </div>
 
           {discountPercentage >= 10 && (
-            <div className="flex gap-1">
+            <div className="flex gap-1 ">
               <p className="text-gray-500 line-through text-sm">
                 U$ {priceWithoutDiscount(price, discountPercentage)}
               </p>
@@ -146,21 +146,13 @@ export const CartCard: React.FC<ICartCard> = ({
             </div>
           )}
 
-          <p className="text-xl lg:text-2xl font-bold text-blue-700">U$ {price}</p>
-          <p className="text-gray-700">{shippingInformation}</p>
+          <p className="text-base md:text-xl lg:text-2xl font-bold text-blue-700">U$ {price}</p>
+          <p className="text-gray-700 text-sm md:text-base">{shippingInformation}</p>
           <p className="text-green-900 bg-green-200 text-center text-sm lg:text-base rounded-md w-20">
             {availabilityStatus}
           </p>
 
-          <div className="my-2">
-            {(Array.isArray(tags) ? tags : []).map((tag, index) => (
-              <span key={index} className="mr-2 px-2 py-1 text-sm lg:text-base bg-gray-200 rounded">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2 mt-1">
             <CartButton
               isInCart={isInCart}
               isLogged={isAuthenticated}

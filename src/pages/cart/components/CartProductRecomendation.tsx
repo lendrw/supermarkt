@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { ProductService } from "../../../shared/services/api";
 import type { IProduct } from "../../../shared/types";
 import { LoadingSpinner } from "../../../shared/components";
-import { ProductList } from "../../products/components";
+import { ProductCard } from "../../products/components";
 
 export const CartProductRecomendation: React.FC = () => {
   const categoriesArray: string[] = [
@@ -36,7 +36,6 @@ export const CartProductRecomendation: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Escolhe um slug aleatório apenas uma vez
   const slug = useMemo(
     () => categoriesArray[Math.floor(Math.random() * categoriesArray.length)],
     []
@@ -44,34 +43,49 @@ export const CartProductRecomendation: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-
     ProductService.getProductsByCategory(1, slug).then((result) => {
       setIsLoading(false);
 
       if (result instanceof Error) {
         setError(result.message);
       } else {
-        // Pega apenas os 6 primeiros produtos
         setProducts(result.products.slice(0, 6));
       }
     });
   }, [slug]);
 
   return (
-    <div className="bg-white mt-6 shadow-md rounded-2xl w-100 md:w-[35vw] h-auto flex flex-col items-center justify-center gap-5 p-4">
-      <h2 className="font-bold text-lg text-center mt-3">Take a look at our other products</h2>
+    <div className="bg-white shadow-md rounded-2xl overflow-auto w-auto md:w-[35vw] h-auto flex flex-col items-center justify-center p-4">
+      <h2 className="font-bold text-lg text-center mt-3">
+        Take a look at our other products
+      </h2>
       {isLoading ? (
-        <LoadingSpinner isFullPage={false}/>
+        <LoadingSpinner isFullPage={false} />
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
       ) : (
-        <ProductList
-          products={products}
-          isLoading={isLoading}
-          error={error}
-          gridClassName="grid grid-col-1"
-          containerClassName="w-80 md:w-[35vw]"
-          isRoundedCard={false}
-          hasShadow={false}
-        />
+        <div
+          className="flex flex-row mt-4 w-full md:flex-col overflow-x-auto gap-6"
+        >
+          {products.map((product) => (
+            <div key={product.id} className="min-w-[250px]">
+              <ProductCard
+                id={product.id}
+                title={product.title}
+                thumbnail={product.thumbnail}
+                price={product.price}
+                rating={product.rating}
+                discountPercentage={product.discountPercentage}
+                availabilityStatus={product.availabilityStatus}
+                brand={product.brand}
+                shippingInformation={product.shippingInformation}
+                tags={product.tags}
+                isRoundedCard={false}
+                hasShadow={false}
+              />
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
