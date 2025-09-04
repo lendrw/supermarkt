@@ -1,5 +1,5 @@
 export const Environment = {
   BASE_URL: "https://dummyjson.com",
-  MOCK_URL:"http://localhost:3000",
+  MOCK_URL:"/api",
   LIMIT: 20,
 };

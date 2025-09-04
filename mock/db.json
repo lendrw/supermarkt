@@ -1,17 +1,6 @@
 {
   "users": [
     {
-      "id": 1,
-      "username": "leandro",
-      "password": "1",
-      "email": "l@gmail.com",
-      "firstName": "Leandro",
-      "lastName": "Cabral",
-      "gender": "male",
-      "image": "https://example.com/photo.jpg",
-      "accessToken": "gggggggggg.gggggggg"
-    },
-    {
       "email": "j@gmail.com",
       "password": "abc",
       "accessToken": "764da99e-75cf-4597-99ef-b70c2d9d3b83",
@@ -26,105 +15,8 @@
   ],
   "carts": [
     {
-      "userId": 1,
-      "items": [],
-      "id": 1,
-      "totalProducts": 4,
-      "subtotal": 97.96000000000001
-    },
-    {
-      "userId": 2,
+      "userId": 3,
       "items": [
-        {
-          "productId": 190,
-          "title": "IWC Ingenieur Automatic Steel",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/thumbnail.webp",
-          "price": 4999.99,
-          "quantity": 3,
-          "availabilityStatus": "In Stock",
-          "brand": "IWC",
-          "discountPercentage": 9.45,
-          "shippingInformation": "Ships overnight",
-          "tags": [
-            "watches",
-            "luxury watches"
-          ]
-        },
-        {
-          "productId": 119,
-          "title": "Olay Ultra Moisture Shea Butter Body Wash",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/skin-care/olay-ultra-moisture-shea-butter-body-wash/thumbnail.webp",
-          "price": 12.99,
-          "quantity": 1,
-          "availabilityStatus": "In Stock",
-          "brand": "Olay",
-          "discountPercentage": 16.39,
-          "shippingInformation": "Ships in 1-2 business days",
-          "tags": [
-            "personal care",
-            "body wash"
-          ]
-        },
-        {
-          "productId": 118,
-          "title": "Attitude Super Leaves Hand Soap",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/thumbnail.webp",
-          "price": 8.99,
-          "quantity": 2,
-          "availabilityStatus": "In Stock",
-          "brand": "Attitude",
-          "discountPercentage": 18.49,
-          "shippingInformation": "Ships overnight",
-          "tags": [
-            "personal care",
-            "hand soap"
-          ]
-        },
-        {
-          "productId": 160,
-          "title": "Samsung Galaxy Tab S8 Plus Grey",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/tablets/samsung-galaxy-tab-s8-plus-grey/thumbnail.webp",
-          "price": 599.99,
-          "quantity": 1,
-          "availabilityStatus": "In Stock",
-          "brand": "Samsung",
-          "discountPercentage": 13.31,
-          "shippingInformation": "Ships in 2 weeks",
-          "tags": [
-            "electronics",
-            "tablets"
-          ]
-        },
-        {
-          "productId": 159,
-          "title": "iPad Mini 2021 Starlight",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/tablets/ipad-mini-2021-starlight/thumbnail.webp",
-          "price": 499.99,
-          "quantity": 1,
-          "availabilityStatus": "In Stock",
-          "brand": "Apple",
-          "discountPercentage": 3.64,
-          "shippingInformation": "Ships in 1-2 business days",
-          "tags": [
-            "electronics",
-            "tablets"
-          ]
-        },
-        {
-          "productId": 2,
-          "title": "Eyeshadow Palette with Mirror",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
-          "price": 19.99,
-          "quantity": 2,
-          "availabilityStatus": "In Stock",
-          "brand": "Glamour Beauty",
-          "discountPercentage": 18.19,
-          "shippingInformation": "Ships in 2 weeks",
-          "tags": [
-            "beauty",
-            "eyeshadow"
-          ]
-        },
         {
           "productId": 1,
           "title": "Essence Mascara Lash Princess",
@@ -139,77 +31,26 @@
             "beauty",
             "mascara"
           ]
-        }
-      ],
-      "id": 2,
-      "totalProducts": 10,
-      "subtotal": 16160.899999999998
-    },
-    {
-      "userId": 3,
-      "items": [
-        {
-          "productId": 118,
-          "title": "Attitude Super Leaves Hand Soap",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/skin-care/attitude-super-leaves-hand-soap/thumbnail.webp",
-          "price": 8.99,
-          "quantity": 2,
-          "availabilityStatus": "In Stock",
-          "brand": "Attitude",
-          "discountPercentage": 18.49,
-          "shippingInformation": "Ships overnight",
-          "tags": [
-            "personal care",
-            "hand soap"
-          ]
         },
         {
-          "productId": 172,
-          "title": "Blue Women's Handbag",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-bags/blue-women's-handbag/thumbnail.webp",
-          "price": 49.99,
-          "quantity": 2,
-          "availabilityStatus": "In Stock",
-          "brand": "Fashionista",
-          "discountPercentage": 17.88,
-          "shippingInformation": "Ships in 1 week",
-          "tags": [
-            "fashion accessories",
-            "handbags"
-          ]
-        },
-        {
-          "productId": 177,
-          "title": "Black Women's Gown",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-dresses/black-women's-gown/thumbnail.webp",
-          "price": 129.99,
+          "productId": 2,
+          "title": "Eyeshadow Palette with Mirror",
+          "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp",
+          "price": 19.99,
           "quantity": 1,
           "availabilityStatus": "In Stock",
-          "discountPercentage": 10.48,
-          "shippingInformation": "Ships in 1 week",
+          "brand": "Glamour Beauty",
+          "discountPercentage": 18.19,
+          "shippingInformation": "Ships in 2 weeks",
           "tags": [
-            "clothing",
-            "gowns"
-          ]
-        },
-        {
-          "productId": 180,
-          "title": "Dress Pea",
-          "thumbnail": "https://cdn.dummyjson.com/product-images/womens-dresses/dress-pea/thumbnail.webp",
-          "price": 49.99,
-          "quantity": 1,
-          "availabilityStatus": "Low Stock",
-          "discountPercentage": 17.68,
-          "shippingInformation": "Ships overnight",
-          "tags": [
-            "clothing",
-            "dresses"
+            "beauty",
+            "eyeshadow"
           ]
         }
       ],
-      "id": 3,
-      "totalProducts": 7,
-      "subtotal": 306.93
+      "id": 1,
+      "totalProducts": 1,
+      "subtotal": 9.99
     }
   ]
 }

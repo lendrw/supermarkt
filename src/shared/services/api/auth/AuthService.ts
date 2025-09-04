@@ -1,31 +1,31 @@
-import type { IAuth, IUser } from "../../../types";
+import type { IAuth } from "../../../types";
 import { Mock } from "../axios-config";
-
-
 
 const login = async (
   email: string,
   password: string
 ): Promise<IAuth | Error> => {
   try {
-    const { data } = await Mock.get<IUser[]>(
+    const { data } = await Mock.get<IAuth>(
       `/users?email=${email}&password=${password}`
     );
+    return data;
+  } catch (error: unknown) {
+    console.error(error);
 
-    if (data.length > 0) {
-      const user = data[0];
-      return {
-        accessToken: user.accessToken,
-        userId: user.id,
+    if (typeof error === "object" && error !== null && "response" in error) {
+      const err = error as {
+        response?: { status?: number; data?: { message?: string } };
       };
+
+      if (err.response?.status === 401) {
+        return new Error("Invalid email or password.");
+      }
+
+      return new Error(err.response?.data?.message || "Login error.");
     }
 
-    return new Error("Invalid email or password.");
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || "Login error."
-    );
+    return new Error("Unexpected login error.");
   }
 };
 
@@ -34,30 +34,24 @@ const register = async (
   password: string
 ): Promise<IAuth | Error> => {
   try {
-    const { data: existingUsers } = await Mock.get<IUser[]>(
-      `/users?email=${email}`
-    );
-    if (existingUsers.length > 0) {
-      return new Error("Email is already registered.");
+    const { data } = await Mock.post<IAuth>("/users", { email, password });
+    return data;
+  } catch (error: unknown) {
+    console.error(error);
+
+    if (typeof error === "object" && error !== null && "response" in error) {
+      const err = error as {
+        response?: { status?: number; data?: { message?: string } };
+      };
+
+      if (err.response?.status === 409) {
+        return new Error("Email is already registered.");
+      }
+
+      return new Error(err.response?.data?.message || "Registration error.");
     }
 
-    const newUser: Omit<IUser, "id"> = {
-      email,
-      password,
-      accessToken: crypto.randomUUID(),
-    };
-
-    const { data: createdUser } = await Mock.post<IUser>("/users", newUser);
-
-    return {
-      accessToken: createdUser.accessToken,
-      userId: createdUser.id,
-    };
-  } catch (error) {
-    console.error(error);
-    return new Error(
-      (error as { message: string }).message || "Registration error."
-    );
+    return new Error("Unexpected registration error.");
   }
 };
 

@@ -23,7 +23,7 @@ const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
 });
 
 export const Login = () => {
-  const { login } = useAuthContext();
+  const { login } = useAuthContext(); // <- contexto de auth
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const { formRef } = useVForm();
@@ -45,8 +45,13 @@ export const Login = () => {
       if (result instanceof Error) {
         setError(result.message);
       } else {
+        // salva token localmente
         localStorage.setItem("APP_ACCESS_TOKEN", result.accessToken);
-        login(validatedData.email, validatedData.password);
+
+        // chama o contexto com os dados de auth
+        login(result);
+
+        // redireciona
         navigate("/");
       }
     } catch (err) {
@@ -64,7 +69,11 @@ export const Login = () => {
 
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
-      <VForm onSubmit={handleSubmit} ref={formRef} className="w-full flex items-center justify-center">
+      <VForm
+        onSubmit={handleSubmit}
+        ref={formRef}
+        className="w-full flex items-center justify-center"
+      >
         <FormCard className="w-88 md:w-100 h-90 flex items-center justify-center">
           <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
           <span className="text-blue-900">
