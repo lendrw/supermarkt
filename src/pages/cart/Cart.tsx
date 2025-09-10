@@ -5,13 +5,13 @@ import { RoundedButton } from "../../shared/utils";
 import { CartProductRecomendation } from "./components/CartProductRecomendation";
 
 export const Cart = () => {
-  const { cart, totalProducts, subtotal } = useCartContext();
+  const { items, totalProducts, subtotal } = useCartContext();
 
   return (
     <BaseLayout className="flex flex-col md:flex-row justify-around relative p-4 ">
       <div className="h-full flex flex-col gap-5">
         {totalProducts > 0 ? (
-          cart?.items.map((cartProduct, index) => (
+          items.map((cartProduct, index) => (
             <CartCard
               key={`${cartProduct.productId}-${index}`}
               icon={cartProduct.thumbnail}

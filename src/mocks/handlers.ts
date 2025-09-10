@@ -47,35 +47,6 @@ const carts: ICart[] = [
 ];
 
 export const handlers = [
-  // Mock para categorias
-  http.get("https://dummyjson.com/products/categories", ({ request }) => {
-    return HttpResponse.json([
-      "beauty",
-      "fragrances",
-      "furniture",
-      "groceries",
-      "home-decoration",
-    ]);
-  }),
-
-  // Mock para produtos
-  http.get("https://dummyjson.com/products", ({ request }) => {
-    const url = new URL(request.url);
-    const limit = url.searchParams.get("limit") ?? "20";
-    const skip = url.searchParams.get("skip") ?? "0";
-
-    return HttpResponse.json({
-      products: [
-        { id: 1, title: "Product 1", price: 100 },
-        { id: 2, title: "Product 2", price: 200 },
-      ],
-      total: 2,
-      skip: Number(skip),
-      limit: Number(limit),
-    });
-  }),
-  
-  // GET usuários (com suporte a query params)
   http.get("/api/users", ({ request }) => {
     const url = new URL(request.url);
     const email = url.searchParams.get("email");
@@ -93,7 +64,6 @@ export const handlers = [
         );
       }
 
-      // 🔑 Aqui retornamos o token e id do usuário
       return HttpResponse.json(
         {
           accessToken: user.accessToken,
@@ -112,7 +82,6 @@ export const handlers = [
     return HttpResponse.json(users, { status: 200 });
   }),
 
-  // POST usuário (cadastro)
   http.post("/api/users", async ({ request }) => {
     const body = (await request.json()) as Partial<IUser> | null;
 
@@ -120,7 +89,6 @@ export const handlers = [
       return HttpResponse.json({ message: "Dados inválidos" }, { status: 400 });
     }
 
-    // checar se email já existe
     const exists = users.some((u) => u.email === body.email);
     if (exists) {
       return HttpResponse.json(
@@ -138,7 +106,6 @@ export const handlers = [
 
     users.push(newUser);
 
-    // 🔑 retorna direto os dados de autenticação
     return HttpResponse.json(
       {
         accessToken: newUser.accessToken,
@@ -148,7 +115,6 @@ export const handlers = [
     );
   }),
 
-  // GET carrinho por userId
   http.get("/api/cart/:userId", ({ params }) => {
     const { userId } = params;
     const cart = carts.find((c) => c.userId === Number(userId));
@@ -161,46 +127,106 @@ export const handlers = [
     return HttpResponse.json(cart, { status: 200 });
   }),
 
-  // PUT carrinho
-  http.put("/api/cart/:userId", async ({ request, params }) => {
-    const { userId } = params;
-    const body = (await request.json()) as Partial<ICart> | null;
+  http.put(
+    "/api/cart/:userId/items/:productId",
+    async ({ request, params }) => {
+      const { userId, productId } = params;
+      const body = (await request.json()) as Partial<ICartItem>;
 
-    if (!body || !body.items) {
-      return HttpResponse.json({ message: "Dados inválidos" }, { status: 400 });
-    }
+      const cart = carts.find((c) => c.userId === Number(userId));
+      if (!cart) {
+        return HttpResponse.json(
+          { message: "Carrinho não encontrado" },
+          { status: 404 }
+        );
+      }
 
-    const index = carts.findIndex((c) => c.userId === Number(userId));
+      const index = cart.items.findIndex(
+        (i) => i.productId === Number(productId)
+      );
+      if (index === -1) {
+        return HttpResponse.json(
+          { message: "Produto não encontrado" },
+          { status: 404 }
+        );
+      }
 
-    if (index === -1) {
-      const items = body.items as ICartItem[];
+      cart.items[index] = { ...cart.items[index], ...body };
 
-      const totalProducts = items.reduce((acc, item) => acc + item.quantity, 0);
-      const subtotal = items.reduce(
+      cart.totalProducts = cart.items.reduce(
+        (acc, item) => acc + item.quantity,
+        0
+      );
+      cart.subtotal = cart.items.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
       );
 
-      const newCart: ICart = {
-        id: carts.length + 1,
-        userId: Number(userId),
-        items,
-        totalProducts,
-        subtotal,
-      };
+      return HttpResponse.json(cart, { status: 200 });
+    }
+  ),
 
-      carts.push(newCart);
-      return HttpResponse.json(newCart, { status: 201 });
+  http.delete("/api/cart/:userId/items/:productId", ({ params }) => {
+    const { userId, productId } = params;
+
+    const cart = carts.find((c) => c.userId === Number(userId));
+    if (!cart) {
+      return HttpResponse.json(
+        { message: "Carrinho não encontrado" },
+        { status: 404 }
+      );
     }
 
-    carts[index] = {
-      ...carts[index],
-      ...body,
-      totalProducts: body.items!.reduce((acc, item) => acc + item.quantity, 0),
-      subtotal: body.items!.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0
-      ),
-    };
+    cart.items = cart.items.filter((i) => i.productId !== Number(productId));
+
+    cart.totalProducts = cart.items.reduce(
+      (acc, item) => acc + item.quantity,
+      0
+    );
+    cart.subtotal = cart.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    return HttpResponse.json(cart, { status: 200 });
+  }),
+
+  http.post("/api/cart/:userId/items", async ({ request, params }) => {
+    const { userId } = params;
+    const body = (await request.json()) as ICartItem;
+
+    let cart = carts.find((c) => c.userId === Number(userId));
+
+    if (!cart) {
+      cart = {
+        id: carts.length + 1,
+        userId: Number(userId),
+        items: [body],
+        totalProducts: body.quantity,
+        subtotal: body.price * body.quantity,
+      };
+      carts.push(cart);
+      return HttpResponse.json(cart, { status: 201 });
+    }
+
+    const existingItem = cart.items.find(
+      (item) => item.productId === body.productId
+    );
+    if (existingItem) {
+      existingItem.quantity += body.quantity;
+    } else {
+      cart.items.push(body);
+    }
+
+    cart.totalProducts = cart.items.reduce(
+      (acc, item) => acc + item.quantity,
+      0
+    );
+    cart.subtotal = cart.items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+
+    return HttpResponse.json(cart, { status: 200 });
   }),
 ];

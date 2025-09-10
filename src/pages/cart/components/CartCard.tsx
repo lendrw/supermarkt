@@ -49,69 +49,49 @@ export const CartCard: React.FC<ICartCard> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAddToCart = async () => {
+  const handleAction = async (
+    action: () => Promise<void>,
+    errorMessage: string
+  ) => {
     if (!userId) return;
     setIsLoading(true);
     setError(null);
 
     try {
-      await addToCart({
-        productId: id,
-        price,
-        thumbnail: icon,
-        title,
-        availabilityStatus,
-        brand,
-        discountPercentage,
-        shippingInformation,
-        tags,
-      });
+      await action();
     } catch (err) {
-      setError("Erro ao adicionar ao carrinho");
       console.error(err);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleIncrement = async () => {
-    if (!userId || !isInCart) return;
-    setIsLoading(true);
+  const handleAddToCart = () =>
+    handleAction(
+      () =>
+        addToCart({
+          productId: id,
+          price,
+          thumbnail: icon,
+          title,
+          availabilityStatus,
+          brand,
+          discountPercentage,
+          shippingInformation,
+          tags,
+        }),
+      "Erro ao adicionar ao carrinho"
+    );
 
-    try {
-      await increment(id);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleIncrement = () =>
+    handleAction(() => increment(id), "Erro ao incrementar produto");
 
-  const handleDecrement = async () => {
-    if (!userId || !isInCart) return;
-    setIsLoading(true);
+  const handleDecrement = () =>
+    handleAction(() => decrement(id), "Erro ao decrementar produto");
 
-    try {
-      await decrement(id);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDeleteProduct = async () => {
-    if (!userId || !isInCart) return;
-    setIsLoading(true);
-
-    try {
-      await deleteProduct(id);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleDeleteProduct = () =>
+    handleAction(() => deleteProduct(id), "Erro ao remover produto");
 
   useEffect(() => {
     const item = cart?.items.find((item) => item.productId === id);
@@ -123,53 +103,65 @@ export const CartCard: React.FC<ICartCard> = ({
   if (isInCart)
     return (
       <div className="shadow-md flex flex-row items-center bg-white rounded-2xl h-60 md:h-70 w-full md:w-[55vw]">
-        <div className="">
-          <img className="w-30 md:w-35 lg:w-50" src={icon} alt={title} />
-        </div>
-        <div className="flex flex-col justify-evenly h-54 md:h-60 lg:h-65 ">
-          <h2 className="text-base md:text-xl lg:text-2xl">{title}</h2>
-
-          <div className="flex gap-1 text-gray-500 text-sm md:text-base">
-            <p className="text-gray-700">Brand:</p>
-            <p className="underline text-gray-700">{brand}</p>
-            <p>- Id: {id}</p>
+        {error ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-red-500">{error}</p>
           </div>
-
-          {discountPercentage >= 10 && (
-            <div className="flex gap-1 ">
-              <p className="text-gray-500 line-through text-sm">
-                U$ {priceWithoutDiscount(price, discountPercentage)}
-              </p>
-              <p className="bg-yellow-200 text-red-500 text-sm font-bold rounded-md w-17 text-center">
-                {discountPercentage.toFixed(0)}% OFF
-              </p>
+        ) : (
+          <>
+            <div className="">
+              <img className="w-30 md:w-35 lg:w-50" src={icon} alt={title} />
             </div>
-          )}
+            <div className="flex flex-col justify-evenly h-54 md:h-60 lg:h-65 ">
+              <h2 className="text-base md:text-xl lg:text-2xl">{title}</h2>
 
-          <p className="text-base md:text-xl lg:text-2xl font-bold text-blue-700">U$ {price}</p>
-          <p className="text-gray-700 text-sm md:text-base">{shippingInformation}</p>
-          <p className="text-green-900 bg-green-200 text-center text-sm lg:text-base rounded-md w-20">
-            {availabilityStatus}
-          </p>
+              <div className="flex gap-1 text-gray-500 text-sm md:text-base">
+                <p className="text-gray-700">Brand:</p>
+                <p className="underline text-gray-700">{brand}</p>
+                <p>- Id: {id}</p>
+              </div>
 
-          <div className="flex flex-row gap-2 mt-1">
-            <CartButton
-              isInCart={isInCart}
-              isLogged={isAuthenticated}
-              quantity={quantity}
-              isLoading={isLoading}
-              onAddToCart={handleAddToCart}
-              onIncrement={handleIncrement}
-              onDecrement={handleDecrement}
-            />
-            <RoundedButton
-              className="bg-red-600 hover:bg-red-700 text-white w-20"
-              onClick={handleDeleteProduct}
-            >
-              Delete
-            </RoundedButton>
-          </div>
-        </div>
+              {discountPercentage >= 10 && (
+                <div className="flex gap-1 ">
+                  <p className="text-gray-500 line-through text-sm">
+                    U$ {priceWithoutDiscount(price, discountPercentage)}
+                  </p>
+                  <p className="bg-yellow-200 text-red-500 text-sm font-bold rounded-md w-17 text-center">
+                    {discountPercentage.toFixed(0)}% OFF
+                  </p>
+                </div>
+              )}
+
+              <p className="text-base md:text-xl lg:text-2xl font-bold text-blue-700">
+                U$ {price}
+              </p>
+              <p className="text-gray-700 text-sm md:text-base">
+                {shippingInformation}
+              </p>
+              <p className="text-green-900 bg-green-200 text-center text-sm lg:text-base rounded-md w-20">
+                {availabilityStatus}
+              </p>
+
+              <div className="flex flex-row gap-2 mt-1">
+                <CartButton
+                  isInCart={isInCart}
+                  isLogged={isAuthenticated}
+                  quantity={quantity}
+                  isLoading={isLoading}
+                  onAddToCart={handleAddToCart}
+                  onIncrement={handleIncrement}
+                  onDecrement={handleDecrement}
+                />
+                <RoundedButton
+                  className="bg-red-600 hover:bg-red-700 text-white w-20"
+                  onClick={handleDeleteProduct}
+                >
+                  Delete
+                </RoundedButton>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
 };

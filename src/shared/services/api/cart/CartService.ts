@@ -1,107 +1,80 @@
 import { Mock } from "../axios-config";
 import type { ICart, ICartItem } from "../../../types/cart";
+import { safeRequest } from "../../../utils/safeRequest";
 
-const getLoggedUserCart = async (userId: number): Promise<ICart | null> => {
-  const { data } = await Mock.get<ICart[]>(`/carts?userId=${userId}`);
+const getLoggedUserCart = (userId: number): Promise<ICart | null> =>
+  safeRequest(async () => {
+    const { data } = await Mock.get<ICart>(`/cart/${userId}`);
+    if (!data) return null;
 
-  if (data.length === 0) return null;
-
-  const cart = data[0];
-
-  const totalProducts = cart.items.reduce(
-    (acc, item) => acc + item.quantity,
-    0
-  );
-  const subtotal = cart.items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
-
-  return {
-    ...cart,
-    totalProducts,
-    subtotal,
-  };
-};
-
-const addToCart = async (
-  userId: number,
-  product: Omit<ICartItem, "quantity">
-) => {
-  const cart = await getLoggedUserCart(userId);
-  const newItem: ICartItem = {
-    productId: product.productId,
-    title: product.title,
-    thumbnail: product.thumbnail,
-    price: product.price,
-    quantity: 1,
-    availabilityStatus: product.availabilityStatus,
-    brand: product.brand,
-    discountPercentage: product.discountPercentage,
-    shippingInformation: product.shippingInformation,
-    tags: product.tags,
-  };
-
-  if (!cart) {
-    const newCart = { userId, items: [newItem] };
-    await Mock.post("/carts", newCart);
-    return newCart;
-  } else {
-    const existingItem = cart.items.find(
-      (item) => item.productId === product.productId
+    const items = data.items ?? [];
+    const totalProducts = items.reduce((acc, item) => acc + item.quantity, 0);
+    const subtotal = items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
     );
 
-    let updatedItems;
-    if (existingItem) {
-      updatedItems = cart.items.map((item) =>
-        item.productId === product.productId
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-    } else {
-      updatedItems = [...cart.items, newItem];
+    return { ...data, items, totalProducts, subtotal };
+  }, "getLoggedUserCart");
+
+const addToCart = (userId: number, product: Omit<ICartItem, "quantity">) =>
+  safeRequest(async () => {
+    const cart = await getLoggedUserCart(userId);
+    const newItem: ICartItem = { ...product, quantity: 1 };
+
+    if (!cart) {
+      await Mock.post(`/cart/${userId}/items`, newItem);
+      return { userId, items: [newItem] };
     }
 
-    const updatedCart = { ...cart, items: updatedItems };
-    await Mock.put(`/carts/${cart.id}`, updatedCart);
-    return updatedCart;
-  }
-};
+    const existingItem = cart.items.find(
+      (i) => i.productId === product.productId
+    );
+    const updatedItems = existingItem
+      ? cart.items.map((i) =>
+          i.productId === product.productId
+            ? { ...i, quantity: i.quantity + 1 }
+            : i
+        )
+      : [...cart.items, newItem];
 
-const updateQuantity = async (
-  userId: number,
-  productId: number,
-  delta: number
-) => {
-  const cart = await getLoggedUserCart(userId);
-  if (!cart) return null;
+    await Mock.post(`/cart/${userId}/items`, newItem);
+    return { ...cart, items: updatedItems };
+  }, "addToCart");
 
-  const updatedItems = cart.items
-    .map((item) =>
-      item.productId === productId
-        ? { ...item, quantity: item.quantity + delta }
-        : item
-    )
-    .filter((item) => item.quantity > 0);
+const updateQuantity = (userId: number, productId: number, delta: number) =>
+  safeRequest(async () => {
+    const cart = await getLoggedUserCart(userId);
+    if (!cart) return null;
 
-  const updatedCart = { ...cart, items: updatedItems };
-  await Mock.put(`/carts/${cart.id}`, updatedCart);
-  return updatedCart;
-};
+    const item = cart.items.find((i) => i.productId === productId);
+    if (!item) return null;
 
-const deleteProduct = async (userId: number, productId: number) => {
-  const cart = await getLoggedUserCart(userId);
-  if (!cart) return null;
+    const updatedItem = { ...item, quantity: item.quantity + delta };
+    if (updatedItem.quantity <= 0) {
+      return deleteProduct(userId, productId);
+    }
 
-  const updatedItems = cart.items.filter(
-    (item) => item.productId !== productId
-  );
+    await Mock.put(`/cart/${userId}/items/${productId}`, updatedItem);
+    return {
+      ...cart,
+      items: cart.items.map((i) =>
+        i.productId === productId ? updatedItem : i
+      ),
+    };
+  }, "updateQuantity");
 
-  const updatedCart = { ...cart, items: updatedItems };
+const deleteProduct = (userId: number, productId: number) =>
+  safeRequest(async () => {
+    const cart = await getLoggedUserCart(userId);
+    if (!cart) return null;
 
-  await Mock.put(`/carts/${cart.id}`, updatedCart);
-  return updatedCart;
-};
+    await Mock.delete(`/cart/${userId}/items/${productId}`);
+    return {
+      ...cart,
+      items: cart.items.filter((i) => i.productId !== productId),
+    };
+  }, "deleteProduct");
 
 export const CartService = {
   getLoggedUserCart,

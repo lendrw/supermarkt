@@ -28,7 +28,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const increment = useCallback(
     async (productId: number) => {
       if (!userId) return;
-      await CartService.updateQuantity(userId, productId, +1);
+      await CartService.updateQuantity(userId, productId, +1); 
       await refreshCart();
     },
     [userId, refreshCart]
@@ -37,7 +37,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const decrement = useCallback(
     async (productId: number) => {
       if (!userId) return;
-      await CartService.updateQuantity(userId, productId, -1);
+      await CartService.updateQuantity(userId, productId, -1); 
       await refreshCart();
     },
     [userId, refreshCart]
@@ -46,7 +46,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
   const deleteProduct = useCallback(
     async (productId: number) => {
       if (!userId) return;
-      await CartService.deleteProduct(userId, productId);
+      await CartService.deleteProduct(userId, productId); 
       await refreshCart();
     },
     [userId, refreshCart]
@@ -54,6 +54,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const subtotal = cart?.subtotal ?? 0;
   const totalProducts = cart?.totalProducts ?? 0;
+  const items = cart?.items ?? [];
 
   useEffect(() => {
     refreshCart();
@@ -61,7 +62,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <CartContext.Provider
-      value={{ cart, refreshCart, addToCart, increment, decrement, deleteProduct, subtotal, totalProducts }}
+      value={{
+        cart,
+        refreshCart,
+        addToCart,
+        increment,
+        decrement,
+        deleteProduct,
+        subtotal,
+        totalProducts,
+        items,
+      }}
     >
       {children}
     </CartContext.Provider>

@@ -47,7 +47,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   const [quantity, setQuantity] = useState<number>(cartItem?.quantity ?? 0);
 
   useEffect(() => {
-    const item = cart?.items.find((item) => item.productId === id);
+    const item = cart?.items?.find((item) => item.productId === id);
     setCartItem(item);
     setIsInCart(!!item);
     setQuantity(item?.quantity ?? 0);

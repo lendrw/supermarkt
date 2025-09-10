@@ -26,12 +26,12 @@ import {
 } from "react-icons/lu";
 import { GiAmpleDress, GiHighHeel, GiRunningShoe } from "react-icons/gi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import type { ICategory } from "../../../shared/types";
+import type { ICategory, TCategories } from "../../../shared/types";
 
 export const CategoryBar: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [categories, setCategories] = useState<TCategories>();
 
   const categoryIcons = {
     beauty: LuBrush,
@@ -72,7 +72,7 @@ export const CategoryBar: React.FC = () => {
         if (result instanceof Error) {
           setError(result.message);
         } else {
-          setCategories(result.data);
+          setCategories(result);
         }
       });
     });

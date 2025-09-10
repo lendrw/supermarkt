@@ -21,6 +21,7 @@ export interface ICart {
 
 export interface ICartContext {
   cart: ICart | null;
+  items: ICartItem[];
   subtotal: number;
   totalProducts: number;
   refreshCart: () => Promise<void>;

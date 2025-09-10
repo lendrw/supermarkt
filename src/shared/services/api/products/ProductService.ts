@@ -1,104 +1,81 @@
 import { Api } from "../axios-config";
 import { Environment } from "../../../environment";
 import type { IProduct, TCategories, TProductsWithCount } from "../../../types";
+import { safeRequest } from "../../../utils/safeRequest";
 
-
-
-function handleApiError(error: unknown, fallbackMessage: string): Error {
-  console.error(fallbackMessage, error);
-
-  if (error instanceof Error) {
-    return new Error(error.message || fallbackMessage);
-  }
-
-  return new Error(fallbackMessage);
+function mapProductsResponse(data: TProductsWithCount): TProductsWithCount {
+  return {
+    products: data.products,
+    limit: data.limit,
+    total: data.total,
+  };
 }
 
 const getAll = async (page: number): Promise<TProductsWithCount | Error> => {
-  try {
-    const limit = Environment.LIMIT;
-    const skip = (page - 1) * limit;
-    const res = await Api.get(`/products?limit=${limit}&skip=${skip}`);
+  const limit = Environment.LIMIT;
+  const skip = (page - 1) * limit;
 
-    const data = res.data;
+  const res = await safeRequest(
+    () => Api.get(`/products?limit=${limit}&skip=${skip}`),
+    "getAll products"
+  );
 
-    return {
-      products: data.products,
-      limit: data.limit,
-      total: data.total,
-    };
-  } catch (error) {
-    return handleApiError(error, "Failed to fetch products.");
-  }
+  if (!res) return new Error("Failed to fetch products.");
+
+  return mapProductsResponse(res.data);
 };
 
 const getById = async (id: number): Promise<IProduct | Error> => {
-  try {
-    const res = await Api.get(`/products/${id}`);
-    console.log(res.data);
-    return res.data;
-  } catch (error) {
-    return handleApiError(error, "Failed to fetch product.");
-  }
+  const res = await safeRequest(() => Api.get(`/products/${id}`), "getById");
+
+  if (!res) return new Error("Failed to fetch product.");
+
+  return res.data;
 };
 
 const getCategories = async (limit = 0): Promise<TCategories | Error> => {
-  try {
-    const res = await Api.get(`/products/categories?limit=${limit}`);
+  const res = await safeRequest(
+    () => Api.get(`/products/categories?limit=${limit}`),
+    "getCategories"
+  );
 
-    return res;
-  } catch (error) {
-    return handleApiError(error, "Failed to fetch categories.");
-  }
+  if (!res) return new Error("Failed to fetch categories.");
+
+  return res.data;
 };
 
 const getProductsByCategory = async (
   page: number,
   slug: string | undefined
 ): Promise<TProductsWithCount | Error> => {
-  try {
-    const limit = Environment.LIMIT;
-    const skip = (page - 1) * limit;
+  const limit = Environment.LIMIT;
+  const skip = (page - 1) * limit;
 
-    const res = await Api.get(
-      `/products/category/${slug}?limit=${limit}&skip=${skip}`
-    );
+  const res = await safeRequest(
+    () => Api.get(`/products/category/${slug}?limit=${limit}&skip=${skip}`),
+    "getProductsByCategory"
+  );
 
-    const data = res.data;
+  if (!res) return new Error("Failed to fetch products by category.");
 
-    return {
-      products: data.products,
-      limit: data.limit,
-      total: data.total,
-    };
-  } catch (error) {
-    return handleApiError(error, "Failed to fetch products.");
-  }
+  return mapProductsResponse(res.data);
 };
 
 const getSearchProduct = async (
   page: number,
   query: string
 ): Promise<TProductsWithCount | Error> => {
-  try {
-    const limit = Environment.LIMIT;
-    const skip = (page - 1) * limit;
+  const limit = Environment.LIMIT;
+  const skip = (page - 1) * limit;
 
-    const res = await Api.get(
-      `/products/search?q=${query}&limit=${limit}&skip=${skip}`
-    );
-    console.log(res);
+  const res = await safeRequest(
+    () => Api.get(`/products/search?q=${query}&limit=${limit}&skip=${skip}`),
+    "getSearchProduct"
+  );
 
-    const data = res.data;
+  if (!res) return new Error("Failed to search for products.");
 
-    return {
-      products: data.products,
-      limit: data.limit,
-      total: data.total,
-    };
-  } catch (error) {
-    return handleApiError(error, "Failed to search for products.");
-  }
+  return mapProductsResponse(res.data);
 };
 
 export const ProductService = {

@@ -1,31 +1,22 @@
 import type { IAuth } from "../../../types";
 import { Mock } from "../axios-config";
+import { safeRequest } from "../../../utils/safeRequest";
 
 const login = async (
   email: string,
   password: string
 ): Promise<IAuth | Error> => {
+  const data = await safeRequest(
+    () => Mock.get<IAuth>(`/users?email=${email}&password=${password}`),
+    "Login"
+  );
+
+  if (!data) return new Error("Unexpected login error.");
+
   try {
-    const { data } = await Mock.get<IAuth>(
-      `/users?email=${email}&password=${password}`
-    );
-    return data;
-  } catch (error: unknown) {
-    console.error(error);
-
-    if (typeof error === "object" && error !== null && "response" in error) {
-      const err = error as {
-        response?: { status?: number; data?: { message?: string } };
-      };
-
-      if (err.response?.status === 401) {
-        return new Error("Invalid email or password.");
-      }
-
-      return new Error(err.response?.data?.message || "Login error.");
-    }
-
-    return new Error("Unexpected login error.");
+    return data.data;
+  } catch {
+    return new Error("Login error.");
   }
 };
 
@@ -33,25 +24,17 @@ const register = async (
   email: string,
   password: string
 ): Promise<IAuth | Error> => {
+  const data = await safeRequest(
+    () => Mock.post<IAuth>("/users", { email, password }),
+    "Register"
+  );
+
+  if (!data) return new Error("Unexpected registration error.");
+
   try {
-    const { data } = await Mock.post<IAuth>("/users", { email, password });
-    return data;
-  } catch (error: unknown) {
-    console.error(error);
-
-    if (typeof error === "object" && error !== null && "response" in error) {
-      const err = error as {
-        response?: { status?: number; data?: { message?: string } };
-      };
-
-      if (err.response?.status === 409) {
-        return new Error("Email is already registered.");
-      }
-
-      return new Error(err.response?.data?.message || "Registration error.");
-    }
-
-    return new Error("Unexpected registration error.");
+    return data.data;
+  } catch {
+    return new Error("Registration error.");
   }
 };
 
