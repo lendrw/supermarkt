@@ -4,13 +4,12 @@ import "./index.css";
 import App from "./App.tsx";
 import { worker } from "./mocks/browser";
 
-if (import.meta.env.DEV) {
-  worker.start({
-    serviceWorker: {
-      url: '/supermarkt/mockServiceWorker.js'
-    }
-  });
-}
+// Start MSW in DEV and/or PROD if you want mocks on GitHub Pages
+worker.start({
+  serviceWorker: {
+    url: '/supermarkt/mockServiceWorker.js',
+  },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
