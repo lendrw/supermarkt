@@ -8,7 +8,7 @@ import { SearchProvider } from "./shared/contexts/SearchContext/SearchProvider";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/supermarkt">
       <AuthProvider>
         <CartProvider>
           <SearchProvider>
