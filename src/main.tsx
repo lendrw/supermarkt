@@ -4,8 +4,12 @@ import "./index.css";
 import App from "./App.tsx";
 import { worker } from "./mocks/browser";
 
-if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "production") {
-  worker.start();
+if (import.meta.env.DEV) {
+  worker.start({
+    serviceWorker: {
+      url: '/supermarkt/mockServiceWorker.js'
+    }
+  });
 }
 
 createRoot(document.getElementById("root")!).render(
