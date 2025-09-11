@@ -21,7 +21,7 @@ export const ProductCarousel: React.FC<Props> = ({ product }) => {
       <div className="flex gap-1">
         {/* Thumbnails */}
         <div className="flex flex-col">
-          {product.images.map((imgUrl, index) => (
+          {(product.images ?? []).map((imgUrl, index) => (
             <img
               key={index}
               src={imgUrl}

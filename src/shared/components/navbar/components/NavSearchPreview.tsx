@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { LoadingSpinner } from "../../index";
 import type { IProduct } from "../../../types";
@@ -12,18 +11,18 @@ interface NavSearchPreviewProps {
 }
 
 export const NavSearchPreview: React.FC<NavSearchPreviewProps> = ({
-  products,
+  products = [],
   isLoading,
   error,
   isVisible,
-  onSelect
+  onSelect,
 }) => {
   const navigate = useNavigate();
 
   return (
     isVisible && (
       <div className="w-80 h-auto bg-white absolute rounded-lg top-14 shadow-lg p-4 z-50 flex flex-col">
-        {isLoading && <LoadingSpinner isFullPage={false}/>}
+        {isLoading && <LoadingSpinner isFullPage={false} />}
 
         {error && <p className="text-red-500">{error}</p>}
 
@@ -39,7 +38,7 @@ export const NavSearchPreview: React.FC<NavSearchPreviewProps> = ({
               className="cursor-pointer hover:bg-blue-100 p-2 rounded"
               onClick={() => {
                 navigate(`/products/${product.id}`);
-                onSelect?.(); 
+                onSelect?.();
               }}
             >
               {product.title}

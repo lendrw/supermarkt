@@ -1,4 +1,3 @@
-
 import type { IProduct } from "../../../shared/types";
 import { RenderStars } from "./RenderStars";
 
@@ -13,11 +12,11 @@ export const ProductReviews: React.FC<Props> = ({ product }) => {
         Customer Reviews
       </h2>
 
-      {product.reviews.length === 0 ? (
+      {(product.reviews ?? []).length === 0 ? (
         <p className="text-gray-600">No reviews available.</p>
       ) : (
         <div className="space-y-4">
-          {product.reviews.map((review, index) => (
+          {(product.reviews ?? []).map((review, index) => (
             <div
               key={index}
               className="border border-gray-200 p-4 rounded shadow-sm"

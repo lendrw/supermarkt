@@ -64,10 +64,8 @@ export const CartProductRecomendation: React.FC = () => {
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
-        <div
-          className="flex flex-row mt-4 w-full md:flex-col overflow-x-auto gap-6"
-        >
-          {products.map((product) => (
+        <div className="flex flex-row mt-4 w-full md:flex-col overflow-x-auto gap-6">
+          {(products ?? []).map((product) => (
             <div key={product.id} className="min-w-[250px]">
               <ProductCard
                 id={product.id}

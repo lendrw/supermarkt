@@ -9,7 +9,7 @@ interface NavLinksProps {
   links: NavLink[];
 }
 
-export const NavLinks = ({ links }: NavLinksProps) => {
+export const NavLinks = ({ links = [] }: NavLinksProps) => {
   return (
     <ul className="flex gap-6 text-gray-700 font-medium items-center">
       {links.map((link, index) => (
@@ -17,7 +17,9 @@ export const NavLinks = ({ links }: NavLinksProps) => {
           key={index}
           onClick={link.onClick}
           className={`hover:text-blue-500 cursor-pointer ${
-            link.icon ? "text-2xl relative flex items-center" : "text-sm md:text-base"
+            link.icon
+              ? "text-2xl relative flex items-center"
+              : "text-sm md:text-base"
           }`}
         >
           {link.appendix}

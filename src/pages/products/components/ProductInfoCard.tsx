@@ -34,14 +34,16 @@ export const ProductInfoCard: React.FC<Props> = ({ product }) => {
       </p>
 
       <div className="my-2">
-        {product.tags.map((tag, index) => (
+        {(product.tags ?? []).map((tag, index) => (
           <span key={index} className="mr-2 px-2 py-1 bg-gray-200 rounded">
             {tag}
           </span>
         ))}
       </div>
       <div className="flex w-full justify-center gap-4 items-center">
-        <p className="text-xl sm:text-2xl font-bold text-blue-700">U$ {product.price}</p>
+        <p className="text-xl sm:text-2xl font-bold text-blue-700">
+          U$ {product.price}
+        </p>
         <button className="flex w-35 sm:w-45 items-center justify-center gap-2 bg-blue-600 text-white text-xl px-4 py-2 rounded hover:bg-blue-700 transition">
           <FaShoppingCart className="w-5 h-5" />
           Buy
