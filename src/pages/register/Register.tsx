@@ -74,7 +74,13 @@ export const Register = () => {
 
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
-      <VForm onSubmit={handleSubmit} ref={formRef}>
+      <VForm
+        onSubmit={handleSubmit}
+        ref={formRef}
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      >
         <FormCard className="w-88 md:w-100 h-100 md:h-110">
           <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
           <span className="text-blue-900">

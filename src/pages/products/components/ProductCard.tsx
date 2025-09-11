@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import priceWithoutDiscount from "../../../shared/utils/discount";
+import { useEffect, useState } from "react";
 import { RenderStars } from "./RenderStars";
 import { CartButton } from "../../../shared/utils/cartButton/CartButton";
 import { useAuthContext, useCartContext } from "../../../shared/contexts";
+import priceWithoutDiscount from "../../../shared/utils/discount";
 import type { ICartItem } from "../../../shared/types";
-import { useEffect, useState } from "react";
 
 interface IProductCardProps {
   id: number;
@@ -42,79 +42,65 @@ export const ProductCard: React.FC<IProductCardProps> = ({
   const [cartItem, setCartItem] = useState<ICartItem | undefined>(() =>
     cart?.items.find((item) => item.productId === id)
   );
-
   const [isInCart, setIsInCart] = useState<boolean>(!!cartItem);
   const [quantity, setQuantity] = useState<number>(cartItem?.quantity ?? 0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const item = cart?.items?.find((item) => item.productId === id);
+    const item = cart?.items.find((item) => item.productId === id);
     setCartItem(item);
     setIsInCart(!!item);
     setQuantity(item?.quantity ?? 0);
   }, [cart, id]);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleAddToCart = async () => {
+  const handleAction = async (
+    action: () => Promise<void>,
+    errorMessage: string
+  ) => {
     if (!userId) return;
     setIsLoading(true);
     setError(null);
-
     try {
-      await addToCart({
-        productId: id,
-        price,
-        thumbnail,
-        title,
-        availabilityStatus,
-        brand,
-        discountPercentage,
-        shippingInformation,
-        tags,
-      });
+      await action();
     } catch (err) {
-      setError("Erro ao adicionar ao carrinho");
       console.error(err);
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleIncrement = async () => {
-    if (!userId || !isInCart) return;
-    setIsLoading(true);
+  const handleAddToCart = () =>
+    handleAction(
+      () =>
+        addToCart({
+          productId: id,
+          price,
+          thumbnail,
+          title,
+          availabilityStatus,
+          brand,
+          discountPercentage,
+          shippingInformation,
+          tags,
+        }),
+      "Erro ao adicionar ao carrinho"
+    );
 
-    try {
-      await increment(id);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleIncrement = () =>
+    handleAction(() => increment(id), "Erro ao incrementar produto");
 
-  const handleDecrement = async () => {
-    if (!userId || !isInCart) return;
-    setIsLoading(true);
-
-    try {
-      await decrement(id);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const handleDecrement = () =>
+    handleAction(() => decrement(id), "Erro ao decrementar produto");
 
   return (
     <div
-      className={`flex flex-col p-3 md:p-4 gap-2 md:gap-0  transition relative bg-white ${
+      className={`flex flex-col p-3 md:p-4 gap-2 md:gap-0 transition relative bg-white ${
         isRoundedCard && "rounded-lg"
       } ${hasShadow && "shadow hover:shadow-md"}`}
     >
       <div
-        key={id}
         className="cursor-pointer"
         onClick={() => navigate(`/products/${id}`)}
       >
@@ -124,6 +110,7 @@ export const ProductCard: React.FC<IProductCardProps> = ({
           className="h-40 w-full object-contain mb-4"
         />
         <h2 className="text-sm md:text-base font-semibold mb-2">{title}</h2>
+
         <div className="flex items-center gap-2">
           <span className="text-blue-600 font-bold text-sm md:text-base">
             U$ {price.toFixed(2)}
@@ -134,15 +121,19 @@ export const ProductCard: React.FC<IProductCardProps> = ({
             </span>
           )}
         </div>
+
         <div className="flex gap-1 items-center justify-end mt-1">
           <RenderStars rating={rating} />
         </div>
+
         {discountPercentage >= 10 && (
           <p className="bg-yellow-200 text-red-500 text-md font-bold rounded-md absolute p-1 top-0 right-0">
             -{discountPercentage.toFixed(0)}%
           </p>
         )}
       </div>
+
+      {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <CartButton
         isInCart={isInCart}

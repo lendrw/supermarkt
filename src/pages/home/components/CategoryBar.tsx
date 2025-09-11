@@ -31,7 +31,7 @@ import type { ICategory, TCategories } from "../../../shared/types";
 export const CategoryBar: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [categories, setCategories] = useState<TCategories>();
+  const [categories, setCategories] = useState<TCategories>({ data: [] });
 
   const categoryIcons = {
     beauty: LuBrush,
@@ -142,7 +142,7 @@ export const CategoryBar: React.FC = () => {
                 : "flex overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth"
             }
           >
-            {categories.map((category, index) => {
+            {categories.data.map((category: ICategory, index: number) => {
               const Icon =
                 categoryIcons[category.slug as keyof typeof categoryIcons];
               return (

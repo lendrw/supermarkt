@@ -9,7 +9,7 @@ import { VTextField, VForm, useVForm } from "../../shared/forms";
 import type { IVFormErrors } from "../../shared/forms";
 import * as yup from "yup";
 
-interface IFormData {
+export interface IFormData {
   email: string;
   password: string;
 }
@@ -73,6 +73,9 @@ export const Login = () => {
         onSubmit={handleSubmit}
         ref={formRef}
         className="w-full flex items-center justify-center"
+        placeholder={undefined}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
       >
         <FormCard className="w-88 md:w-100 h-90 flex items-center justify-center">
           <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
