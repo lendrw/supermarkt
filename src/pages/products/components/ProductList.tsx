@@ -43,7 +43,7 @@ export const ProductList: React.FC<ProductListProps> = ({
           }
         >
           {!isLoading &&
-            products.map((product) => (
+            (products ?? []).map((product) => (
               <ProductCard
                 isRoundedCard={isRoundedCard}
                 hasShadow={hasShadow}
