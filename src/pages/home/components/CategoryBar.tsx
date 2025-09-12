@@ -31,7 +31,7 @@ import type { ICategory, TCategories } from "../../../shared/types";
 export const CategoryBar: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [categories, setCategories] = useState<TCategories>({ data: [] });
+  const [categories, setCategories] = useState<TCategories>([]);
 
   const categoryIcons = {
     beauty: LuBrush,
@@ -142,23 +142,21 @@ export const CategoryBar: React.FC = () => {
                 : "flex overflow-x-auto no-scrollbar whitespace-nowrap scroll-smooth"
             }
           >
-            {(categories.data ?? []).map(
-              (category: ICategory, index: number) => {
-                const Icon =
-                  categoryIcons[category.slug as keyof typeof categoryIcons];
-                return (
-                  <div key={index} className="flex items-center justify-center">
-                    <CategoryCard
-                      isLoading={false}
-                      id={index}
-                      title={category.name}
-                      slug={category.slug}
-                      icon={Icon ? <Icon /> : <LuShoppingBasket />}
-                    />
-                  </div>
-                );
-              }
-            )}
+            {(categories ?? []).map((category: ICategory, index: number) => {
+              const Icon =
+                categoryIcons[category.slug as keyof typeof categoryIcons];
+              return (
+                <div key={index} className="flex items-center justify-center">
+                  <CategoryCard
+                    isLoading={false}
+                    id={index}
+                    title={category.name}
+                    slug={category.slug}
+                    icon={Icon ? <Icon /> : <LuShoppingBasket />}
+                  />
+                </div>
+              );
+            })}
           </div>
 
           <button

@@ -50,9 +50,8 @@ export interface ICategory {
   url: string;
 }
 
-export type TCategories = {
-  data: ICategory[];
-};
+export type TCategories = ICategory[];
+
 
 export interface ISearchContextType {
   query: string;

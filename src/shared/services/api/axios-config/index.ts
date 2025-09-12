@@ -7,7 +7,7 @@ const Api = axios.create({
 });
 
 const Mock = axios.create({
-  baseURL: import.meta.env.DEV ? Environment.MOCK_URL : "/supermarkt/api",
+  baseURL: Environment.MOCK_URL,
 });
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -19,7 +19,7 @@ Api.interceptors.response.use(
 
 Mock.interceptors.response.use(
   async (response) => {
-    await delay(300);
+    await delay(300); 
     return responseInterceptor(response);
   },
   async (error) => {
