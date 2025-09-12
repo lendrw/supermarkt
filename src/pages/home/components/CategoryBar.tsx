@@ -178,7 +178,7 @@ export const CategoryBar: React.FC = () => {
           <div className="w-full flex items-center justify-center">
             <button
               onClick={() => setToggle(!toggle)}
-              className="text-white hover:bg-blue-400 active:bg-blue-500 w-8 h-6 sm:w-10 sm:h-9 rounded-3xl flex justify-center items-center transition-colors duration-300 ease-in-out"
+              className="text-white hover:bg-blue-400 active:bg-blue-500 w-8 h-8 sm:w-10 sm:h-10 rounded-3xl flex justify-center items-center transition-colors duration-300 ease-in-out"
             >
               {toggle ? (
                 <IoIosArrowUp size={30} />
