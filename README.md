@@ -24,6 +24,14 @@ Supermercado fictício desenvolvido com **React + Vite**, simulando um e-commerc
 - Filtro por categoria  
 - Layout responsivo  
 
+## 🔑 Credenciais de Acesso  
+- Para **login**, utilize:  
+  - **Email:** `w@gmail.com`  
+  - **Senha:** `umasenha`  
+
+- Para **registro**, qualquer email válido será aceito.  
+  - A senha deve ter **pelo menos 8 caracteres**.  
+
 ## 🔗 Demonstração  
 👉 [Acesse o projeto](https://lendrw.github.io/supermarkt)  
 
