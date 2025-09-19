@@ -1,42 +1,69 @@
-# 🛒 Supermarket  
+# React + TypeScript + Vite
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)  
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=FFD62E)  
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)  
-![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)  
-![MSW](https://img.shields.io/badge/MSW-FF6A33?style=for-the-badge&logoColor=white)  
-![DummyJSON](https://img.shields.io/badge/DummyJSON-000000?style=for-the-badge&logo=json&logoColor=white)  
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Supermercado fictício desenvolvido com **React + Vite**, simulando um e-commerce com registro, login, carrinho de compras e listagem de produtos.  
+Currently, two official plugins are available:
 
-## 🚀 Tecnologias  
-- **React + Vite**  
-- **Tailwind CSS** (design responsivo)  
-- **Axios** (requisições HTTP)  
-- **MSW (Mock Service Worker)** (mock de rotas para login, registro e carrinho)  
-- **DummyJSON** (produtos e categorias)  
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## 📋 Funcionalidades  
-- Registro e login de usuários (**mock com MSW**)  
-- Listagem de produtos da **DummyJSON API**  
-- Carrinho de compras (**mock com MSW**)  
-- Busca de produtos por nome  
-- Filtro por categoria  
-- Layout responsivo  
+## Expanding the ESLint configuration
 
-## 🔗 Demonstração  
-👉 [Acesse o projeto](https://lendrw.github.io/supermarkt)  
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## 🛠️ Como rodar localmente  
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/supermarkt.git
+```js
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-# Acesse a pasta
-cd supermarkt
+      // Remove tseslint.configs.recommended and replace with this
+      ...tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      ...tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      ...tseslint.configs.stylisticTypeChecked,
 
-# Instale as dependências
-npm install
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-# Rode o projeto
-npm run dev
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
+
+export default tseslint.config([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
