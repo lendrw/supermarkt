@@ -23,7 +23,7 @@ const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
 });
 
 export const Login = () => {
-  const { login } = useAuthContext(); // <- contexto de auth
+  const { login } = useAuthContext(); 
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const { formRef } = useVForm();
@@ -45,13 +45,13 @@ export const Login = () => {
       if (result instanceof Error) {
         setError(result.message);
       } else {
-        // salva token localmente
+       
         localStorage.setItem("APP_ACCESS_TOKEN", result.accessToken);
 
-        // chama o contexto com os dados de auth
+        
         login(result);
 
-        // redireciona
+       
         navigate("/");
       }
     } catch (err) {
