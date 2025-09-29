@@ -104,7 +104,7 @@ export const Login = () => {
             />
           </div>
 
-          <FormButton type="submit">Login</FormButton>
+          <FormButton type="submit" data-testid="login-button">Login</FormButton>
 
           <span className="text-blue-900">
             New here? Click{" "}
