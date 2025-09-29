@@ -1,4 +1,3 @@
-
 import { ProductService } from "../../shared/services/api/products/ProductService";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../shared/hooks";
@@ -6,7 +5,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { Environment } from "../../shared/environment";
 import { ProductList } from "./components";
 import { BaseLayout } from "../../shared/layouts";
-import { LoadingSpinner } from "../../shared/components";
+import { CategoryBar, LoadingSpinner } from "../../shared/components";
 import type { IProduct } from "../../shared/types";
 
 export const ProductListByCategory: React.FC = () => {
@@ -44,8 +43,9 @@ export const ProductListByCategory: React.FC = () => {
 
   return (
     <BaseLayout>
+      <CategoryBar />
       {isLoading ? (
-        <LoadingSpinner isFullPage/>
+        <LoadingSpinner isFullPage />
       ) : (
         <ProductList
           isLoading={isLoading}

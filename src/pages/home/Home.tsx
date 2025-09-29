@@ -3,7 +3,7 @@ import { LoadingSpinner } from "../../shared/components";
 import { useDebounce } from "../../shared/hooks";
 import { BaseLayout } from "../../shared/layouts";
 import { ProductList } from "../products/components";
-import { CategoryBar } from "./components/CategoryBar";
+import { CategoryBar } from "../../shared/components/categoryBar/CategoryBar";
 import { ProductService } from "../../shared/services/api";
 import { Environment } from "../../shared/environment";
 import { useSearchParams } from "react-router-dom";
@@ -44,7 +44,7 @@ export const Home = () => {
     <BaseLayout>
       <CategoryBar />
       {isLoading ? (
-        <LoadingSpinner isFullPage/>
+        <LoadingSpinner isFullPage />
       ) : (
         <ProductList
           isLoading={isLoading}

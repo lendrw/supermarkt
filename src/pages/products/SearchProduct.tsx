@@ -3,7 +3,7 @@ import { ProductService } from "../../shared/services/api/products/ProductServic
 import { useParams, useSearchParams } from "react-router-dom";
 import { Environment } from "../../shared/environment";
 import { ProductList } from "./components";
-import { LoadingSpinner } from "../../shared/components";
+import { CategoryBar, LoadingSpinner } from "../../shared/components";
 import { BaseLayout } from "../../shared/layouts";
 import type { IProduct } from "../../shared/types";
 
@@ -54,6 +54,7 @@ export const SearchProduct = () => {
 
   return (
     <BaseLayout>
+      <CategoryBar />
       {isLoading ? (
         <LoadingSpinner isFullPage/>
       ) : error ? (
