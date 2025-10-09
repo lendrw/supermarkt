@@ -4,9 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../shared/services/api/auth/AuthService";
 import { FormCard } from "../../shared/utils/formCard/FormCard";
 import { FormButton } from "../../shared/utils/formButton/FormButton";
-import { VTextField, VForm, useVForm } from "../../shared/forms";
-import type { IVFormErrors } from "../../shared/forms";
 import * as yup from "yup";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
 interface IFormData {
   email: string;
@@ -30,96 +29,104 @@ const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
 });
 
 export const Register = () => {
-  const { formRef } = useVForm();
   const navigate = useNavigate();
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleSubmit = async (data: IFormData) => {
+  const handleSubmit = async (values: IFormData) => {
     setError("");
     setSuccess("");
-    formRef.current?.setErrors({});
 
     try {
-      const validatedData = await formValidationSchema.validate(data, {
-        abortEarly: false,
-      });
-
-      const result = await AuthService.register(
-        validatedData.email,
-        validatedData.password
-      );
+      const result = await AuthService.register(values.email, values.password);
 
       if (!(result instanceof Error)) {
-        console.log("Registration success, will redirect in 3s");
         setSuccess("Account created successfully! Please log in.");
         setTimeout(() => {
-          console.log("Redirecting now...");
           navigate("/login");
         }, 3000);
+      } else {
+        setError(result.message);
       }
     } catch (err) {
-      if (err instanceof yup.ValidationError) {
-        const validationErrors: IVFormErrors = {};
-        err.inner.forEach((validationError) => {
-          if (validationError.path) {
-            validationErrors[validationError.path] = validationError.message;
-          }
-        });
-        formRef.current?.setErrors(validationErrors);
-      }
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
-      <VForm
+      <Formik
+        initialValues={{ email: "", password: "", confirmPassword: "" }}
+        validationSchema={formValidationSchema}
         onSubmit={handleSubmit}
-        ref={formRef}
-        placeholder={undefined}
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
       >
-        <FormCard className="w-88 md:w-100 h-100 md:h-110">
-          <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
-          <span className="text-blue-900">
-            Please enter your user details to continue
-          </span>
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-600">{success}</p>}
+        {({ isSubmitting }) => (
+          <Form>
+            <FormCard className="w-88 md:w-100 h-100 md:h-110">
+              <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
+              <span className="text-blue-900">
+                Please enter your user details to continue
+              </span>
 
-          <div className="flex flex-col">
-            <VTextField
-              name="email"
-              type="email"
-              placeholder="user@example.com"
-              label="Email"
-              autoComplete="email"
-            />
-          </div>
+              {error && <p className="text-red-500">{error}</p>}
+              {success && <p className="text-green-600">{success}</p>}
 
-          <div className="flex flex-col">
-            <VTextField
-              name="password"
-              type="password"
-              label="Password"
-              autoComplete="new-password"
-            />
-          </div>
+              <div className="flex flex-col">
+                <label htmlFor="email" className="text-blue-800 font-bold text-sm">Email</label>
+                <Field
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="user@example.com"
+                  autoComplete="email"
+                  className="text-gray-600 border w-80 border-blue-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 p-1 rounded-lg bg-white text-center"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="span"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-          <div className="flex flex-col">
-            <VTextField
-              name="confirmPassword"
-              type="password"
-              label="Confirm Password"
-              autoComplete="new-password"
-            />
-          </div>
+              <div className="flex flex-col">
+                <label htmlFor="password" className="text-blue-800 font-bold text-sm">Password</label>
+                <Field
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  className="text-gray-600 border w-80 border-blue-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 p-1 rounded-lg bg-white text-center"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="span"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-          <FormButton type="submit">Create Account</FormButton>
-        </FormCard>
-      </VForm>
+              <div className="flex flex-col">
+                <label htmlFor="confirmPassword" className="text-blue-800 font-bold text-sm">Confirm Password</label>
+                <Field
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  className= "text-gray-600 border w-80 border-blue-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 p-1 rounded-lg bg-white text-center"
+                />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="span"
+                  className="text-red-500 text-sm"
+                />
+              </div>
+
+              <FormButton type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Creating..." : "Create Account"}
+              </FormButton>
+            </FormCard>
+          </Form>
+        )}
+      </Formik>
     </BaseLayout>
   );
 };

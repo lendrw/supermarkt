@@ -11,7 +11,7 @@ const login = async (
     "Login"
   );
 
-  if (!data) return new Error("Unexpected login error.");
+  if (!data) return new Error("Wrong email or password.");
 
   try {
     return data.data;

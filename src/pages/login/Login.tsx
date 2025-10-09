@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthService } from "../../shared/services/api/auth/AuthService";
 import { FormCard } from "../../shared/utils/formCard/FormCard";
 import { FormButton } from "../../shared/utils/formButton/FormButton";
-import { VTextField, VForm, useVForm } from "../../shared/forms";
-import type { IVFormErrors } from "../../shared/forms";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 
 export interface IFormData {
@@ -23,101 +22,99 @@ const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
 });
 
 export const Login = () => {
-  const { login } = useAuthContext(); 
+  const { login } = useAuthContext();
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const { formRef } = useVForm();
 
-  const handleSubmit = async (data: IFormData) => {
+  const handleSubmit = async (values: IFormData) => {
     setError("");
-    formRef.current?.setErrors({});
 
     try {
-      const validatedData = await formValidationSchema.validate(data, {
-        abortEarly: false,
-      });
-
-      const result = await AuthService.login(
-        validatedData.email,
-        validatedData.password
-      );
+      const result = await AuthService.login(values.email, values.password);
 
       if (result instanceof Error) {
         setError(result.message);
       } else {
-       
         localStorage.setItem("APP_ACCESS_TOKEN", result.accessToken);
-
-        
         login(result);
-
-       
         navigate("/");
       }
     } catch (err) {
-      if (err instanceof yup.ValidationError) {
-        const validationErrors: IVFormErrors = {};
-        err.inner.forEach((validationError) => {
-          if (validationError.path) {
-            validationErrors[validationError.path] = validationError.message;
-          }
-        });
-        formRef.current?.setErrors(validationErrors);
-      }
+      setError("Unexpected error. Please try again.");
     }
   };
 
   return (
     <BaseLayout className="flex flex-col items-center justify-center">
-      <VForm
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={formValidationSchema}
         onSubmit={handleSubmit}
-        ref={formRef}
-        className="w-full flex items-center justify-center"
-        placeholder={undefined}
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
       >
-        <FormCard className="w-88 md:w-100 h-90 flex items-center justify-center">
-          <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
-          <span className="text-blue-900">
-            Please enter your login details to continue.
-          </span>
-          {error && <p className="text-red-500">{error}</p>}
+        {({ isSubmitting }) => (
+          <Form className="w-full flex items-center justify-center">
+            <FormCard className="w-88 md:w-100 h-90 flex items-center justify-center">
+              <h1 className="text-xl font-bold text-blue-900">Welcome :)</h1>
+              <span className="text-blue-900">
+                Please enter your login details to continue.
+              </span>
 
-          <div className="flex flex-col">
-            <VTextField
-              name="email"
-              type="email"
-              placeholder="user@example.com"
-              label="Email"
-              autoComplete="email"
-            />
-          </div>
+              {error && <p className="text-red-500">{error}</p>}
 
-          <div className="flex flex-col">
-            <VTextField
-              name="password"
-              type="password"
-              placeholder="Your password"
-              label="Password"
-              autoComplete="current-password"
-            />
-          </div>
+              <div className="flex flex-col">
+                <label htmlFor="email" className="text-blue-800 font-bold text-sm">Email</label>
+                <Field
+                  type="email"
+                  name="email"
+                  placeholder="user@example.com"
+                  autoComplete="email"
+                  className="text-gray-600 border w-80 border-blue-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 p-1 rounded-lg bg-white text-center"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-          <FormButton type="submit" data-testid="login-button">Login</FormButton>
+              <div className="flex flex-col">
+                <label htmlFor="password" className="text-blue-800 font-bold text-sm">Password</label>
+                <Field
+                  type="password"
+                  name="password"
+                  placeholder="Your password"
+                  autoComplete="current-password"
+                  className="text-gray-600 border w-80 border-blue-300 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300 p-1 rounded-lg bg-white text-center"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-          <span className="text-blue-900">
-            New here? Click{" "}
-            <span
-              className="text-orange-500 cursor-pointer underline"
-              onClick={() => navigate("/register")}
-            >
-              here
-            </span>{" "}
-            to create an account.
-          </span>
-        </FormCard>
-      </VForm>
+              <FormButton
+                type="submit"
+                data-testid="login-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Logging in..." : "Login"}
+              </FormButton>
+
+              <span className="text-blue-900">
+                New here? Click{" "}
+                <span
+                  className="text-orange-500 cursor-pointer underline"
+                  onClick={() => navigate("/register")}
+                >
+                  here
+                </span>{" "}
+                to create an account.
+              </span>
+            </FormCard>
+          </Form>
+        )}
+      </Formik>
     </BaseLayout>
   );
 };
