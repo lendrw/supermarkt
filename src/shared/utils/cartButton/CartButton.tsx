@@ -41,10 +41,10 @@ export const CartButton: React.FC<CartButtonProps> = ({
         <RoundedButton
           type="button"
           onClick={handleAddToCart}
-          className="bg-orange-500 text-white font-bold text-xs md:text-sm p-1 px-3 w-22 md:w-24 h-7 md:h-8 cursor-pointer flex flex-row items-center justify-around"
+          className="bg-orange-500 text-white font-bold text-xs md:text-sm p-1 px-3 w-22 md:w-25 h-7 md:h-8 cursor-pointer flex flex-row items-center justify-around"
         >
           {isLoading ? (
-            <FaSpinner className="animate-spin text-white" size={15} />
+            <FaSpinner className="animate-spin text-white" size={14} />
           ) : (
             "Add to cart"
           )}
